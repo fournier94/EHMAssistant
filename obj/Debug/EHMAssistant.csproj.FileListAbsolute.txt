@@ -37,3 +37,5 @@ C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssista
 C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssistant.pdb
 C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssistant.MenuDraftReel.resources
 C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssistant.EligiblePlayersFromFile.resources
+C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssistant.ModifyRoster.RosterMenu.resources
+C:\Users\fourn\source\repos\DraftGenerator2\DraftGenerator2\obj\Debug\EHMAssistant.ModifyRoster.Tabs.TabControllerTeamsRoster.resources

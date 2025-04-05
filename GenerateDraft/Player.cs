@@ -135,7 +135,7 @@ namespace EHMAssistant
             return ceiling;
         }
         #endregion
-
+        
         #region Player Constructor
         public Player(int rank, PositionGenerator posGen, CountryGenerator countryGen,
     PlayerTypeGenerator typeGen, PositionStrengthGenerator strengthGen,
@@ -157,8 +157,6 @@ namespace EHMAssistant
 
             // Securely generate handedness (0 = Left, 1 = Right)
             Handedness = _secureRandom.GetRandomValue(0, 1) == 0 ? "Right" : "Left";
-
-            Console.WriteLine($"Rank: {Rank}, Name: {Name}, Birth: {BirthYear}/{BirthMonth}/{BirthDay}, Position: {PlayerPosition}, Type: {PlayerType}, Height: {Height}, Country: {PlayerCountry}, Strength: {PositionStrength}, Handedness: {Handedness}");
         }
         #endregion
     }

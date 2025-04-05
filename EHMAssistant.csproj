@@ -97,11 +97,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BirthDateGenerator.cs" />
-    <Compile Include="EligiblePlayersFromFile.cs">
+    <Compile Include="GenerateDraft\BirthDateGenerator.cs" />
+    <Compile Include="GenerateDraft\EligiblePlayersFromFile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EligiblePlayersFromFile.Designer.cs">
+    <Compile Include="GenerateDraft\EligiblePlayersFromFile.Designer.cs">
       <DependentUpon>EligiblePlayersFromFile.cs</DependentUpon>
     </Compile>
     <Compile Include="GenerateDraft\CountryGenerator.cs" />
@@ -132,10 +132,31 @@
     <Compile Include="MainMenu\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModifyRoster\PlayerReader.cs" />
+    <Compile Include="ModifyRoster\PlayerViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyRoster\PlayerViewerForm.Designer.cs">
+      <DependentUpon>PlayerViewerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyRoster\RosterMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyRoster\RosterMenu.Designer.cs">
+      <DependentUpon>RosterMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyRoster\Tabs\TabControllerTeamsRoster.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ModifyRoster\Tabs\TabControllerTeamsRoster.Designer.cs">
+      <DependentUpon>TabControllerTeamsRoster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyRoster\TeamManager.cs" />
+    <Compile Include="ModifyRoster\Teams.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GenerateDraft\SecureRandomGenerator.cs" />
-    <EmbeddedResource Include="EligiblePlayersFromFile.resx">
+    <EmbeddedResource Include="GenerateDraft\EligiblePlayersFromFile.resx">
       <DependentUpon>EligiblePlayersFromFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GenerateDraft\GenerateDraft.resx">
@@ -146,6 +167,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifyRoster\RosterMenu.resx">
+      <DependentUpon>RosterMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifyRoster\Tabs\TabControllerTeamsRoster.resx">
+      <DependentUpon>TabControllerTeamsRoster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

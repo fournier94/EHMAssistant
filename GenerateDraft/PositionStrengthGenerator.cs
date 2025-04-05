@@ -16,18 +16,18 @@ namespace EHMAssistant
         #region enum Positions strength
         public enum PositionStrength
         {
-            Generational,
-            Elite,
-            FirstLine,
-            SecondLine,
-            ThirdLine,
-            FourthLine,
-            AHL,
-            FirstPair,
-            SecondPair,
-            ThirdPair,
-            Starter,
-            Backup
+            Generational, // Available to every position
+            Elite, // Available to every position
+            FirstLine, // Available to center and winger position
+            SecondLine, // Available to center and winger position
+            ThirdLine, // Available to center and winger position
+            FourthLine, // Available to center and winger position
+            AHL, // Available to every position
+            FirstPair, // Available to defensemen
+            SecondPair, // Available to defensemen
+            ThirdPair, // Available to defensemen
+            Starter, // Available to goaltender
+            Backup // Available to goaltender
         }
         #endregion
 
@@ -100,8 +100,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 20 },
-                            { PositionStrength.Elite, 80 }
+                            { PositionStrength.Generational, 35 },
+                            { PositionStrength.Elite, 65 }
                         }
                     }
                 },
@@ -110,9 +110,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 5 },
-                            { PositionStrength.Elite, 80 },
-                            { PositionStrength.FirstLine, 15 }
+                            { PositionStrength.Generational, 10 },
+                            { PositionStrength.Elite, 90 }
                         }
                     }
                 },
@@ -121,13 +120,23 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 40 },
-                            { PositionStrength.FirstLine, 60 }
+                            { PositionStrength.Elite, 60 },
+                            { PositionStrength.FirstLine, 40 }
                         }
                     }
                 },
                 {
                     4, new RankOdds
+                    {
+                        StrengthProbabilities = new Dictionary<PositionStrength, int>
+                        {
+                            { PositionStrength.Elite, 40 },
+                            { PositionStrength.FirstLine, 60}
+                        }
+                    }
+                },
+                {
+                    5, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
@@ -137,24 +146,12 @@ namespace EHMAssistant
                     }
                 },
                 {
-                    5, new RankOdds
-                    {
-                        StrengthProbabilities = new Dictionary<PositionStrength, int>
-                        {
-                            { PositionStrength.Elite, 10 },
-                            { PositionStrength.FirstLine, 80 },
-                            { PositionStrength.SecondLine, 10 }
-                        }
-                    }
-                },
-                {
                     6, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 10 },
-                            { PositionStrength.FirstLine, 65 },
-                            { PositionStrength.SecondLine, 25 }
+                            { PositionStrength.FirstLine, 90 }
                         }
                     }
                 },
@@ -163,9 +160,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 50 },
-                            { PositionStrength.SecondLine, 5 }
+                            { PositionStrength.Elite, 10 },
+                            { PositionStrength.FirstLine, 70 },
+                            { PositionStrength.SecondLine, 20 }
                         }
                     }
                 },
@@ -174,9 +171,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 30 },
-                            { PositionStrength.SecondLine, 65 }
+                            { PositionStrength.Elite, 7 },
+                            { PositionStrength.FirstLine, 45 },
+                            { PositionStrength.SecondLine, 48 }
                         }
                     }
                 },
@@ -185,9 +182,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 25 },
-                            { PositionStrength.SecondLine, 70 }
+                            { PositionStrength.Elite, 6 },
+                            { PositionStrength.FirstLine, 40 },
+                            { PositionStrength.SecondLine, 54 }
                         }
                     }
                 },
@@ -197,9 +194,8 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 18 },
-                            { PositionStrength.SecondLine, 67 },
-                            { PositionStrength.ThirdLine, 10 }
+                            { PositionStrength.FirstLine, 23 },
+                            { PositionStrength.SecondLine, 72 }
                         }
                     }
                 },
@@ -210,8 +206,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 3 },
                             { PositionStrength.FirstLine, 12 },
-                            { PositionStrength.SecondLine, 65 },
-                            { PositionStrength.ThirdLine, 20 }
+                            { PositionStrength.SecondLine, 75 },
+                            { PositionStrength.ThirdLine, 10 }
                         }
                     }
                 },
@@ -222,8 +218,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 3 },
                             { PositionStrength.FirstLine, 12 },
-                            { PositionStrength.SecondLine, 60 },
-                            { PositionStrength.ThirdLine, 25 }
+                            { PositionStrength.SecondLine, 65 },
+                            { PositionStrength.ThirdLine, 20 }
                         }
                     }
                 },
@@ -306,8 +302,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstLine, 8 },
-                            { PositionStrength.SecondLine, 21 },
-                            { PositionStrength.ThirdLine, 64 },
+                            { PositionStrength.SecondLine, 20 },
+                            { PositionStrength.ThirdLine, 65 },
                             { PositionStrength.FourthLine, 5 }
                         }
                     }
@@ -894,8 +890,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 20 },
-                            { PositionStrength.Elite, 80 }
+                            { PositionStrength.Generational, 35 },
+                            { PositionStrength.Elite, 65 }
                         }
                     }
                 },
@@ -904,9 +900,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 5 },
-                            { PositionStrength.Elite, 80 },
-                            { PositionStrength.FirstLine, 15 }
+                            { PositionStrength.Generational, 10 },
+                            { PositionStrength.Elite, 90 }
                         }
                     }
                 },
@@ -915,13 +910,23 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 40 },
-                            { PositionStrength.FirstLine, 60 }
+                            { PositionStrength.Elite, 60 },
+                            { PositionStrength.FirstLine, 40 }
                         }
                     }
                 },
                 {
                     4, new RankOdds
+                    {
+                        StrengthProbabilities = new Dictionary<PositionStrength, int>
+                        {
+                            { PositionStrength.Elite, 40 },
+                            { PositionStrength.FirstLine, 60}
+                        }
+                    }
+                },
+                {
+                    5, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
@@ -931,24 +936,12 @@ namespace EHMAssistant
                     }
                 },
                 {
-                    5, new RankOdds
-                    {
-                        StrengthProbabilities = new Dictionary<PositionStrength, int>
-                        {
-                            { PositionStrength.Elite, 10 },
-                            { PositionStrength.FirstLine, 80 },
-                            { PositionStrength.SecondLine, 10 }
-                        }
-                    }
-                },
-                {
                     6, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 10 },
-                            { PositionStrength.FirstLine, 65 },
-                            { PositionStrength.SecondLine, 25 }
+                            { PositionStrength.FirstLine, 90 }
                         }
                     }
                 },
@@ -957,9 +950,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 50 },
-                            { PositionStrength.SecondLine, 5 }
+                            { PositionStrength.Elite, 10 },
+                            { PositionStrength.FirstLine, 70 },
+                            { PositionStrength.SecondLine, 20 }
                         }
                     }
                 },
@@ -968,9 +961,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 30 },
-                            { PositionStrength.SecondLine, 65 }
+                            { PositionStrength.Elite, 7 },
+                            { PositionStrength.FirstLine, 45 },
+                            { PositionStrength.SecondLine, 48 }
                         }
                     }
                 },
@@ -979,9 +972,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 25 },
-                            { PositionStrength.SecondLine, 70 }
+                            { PositionStrength.Elite, 6 },
+                            { PositionStrength.FirstLine, 40 },
+                            { PositionStrength.SecondLine, 54 }
                         }
                     }
                 },
@@ -991,9 +984,8 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstLine, 18 },
-                            { PositionStrength.SecondLine, 67 },
-                            { PositionStrength.ThirdLine, 10 }
+                            { PositionStrength.FirstLine, 23 },
+                            { PositionStrength.SecondLine, 72 }
                         }
                     }
                 },
@@ -1004,8 +996,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 3 },
                             { PositionStrength.FirstLine, 12 },
-                            { PositionStrength.SecondLine, 65 },
-                            { PositionStrength.ThirdLine, 20 }
+                            { PositionStrength.SecondLine, 75 },
+                            { PositionStrength.ThirdLine, 10 }
                         }
                     }
                 },
@@ -1016,8 +1008,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 3 },
                             { PositionStrength.FirstLine, 12 },
-                            { PositionStrength.SecondLine, 60 },
-                            { PositionStrength.ThirdLine, 25 }
+                            { PositionStrength.SecondLine, 65 },
+                            { PositionStrength.ThirdLine, 20 }
                         }
                     }
                 },
@@ -1046,7 +1038,7 @@ namespace EHMAssistant
                     }
                 },
                 {
-                    15, new RankOdds
+                                        15, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
@@ -1100,8 +1092,8 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstLine, 8 },
-                            { PositionStrength.SecondLine, 21 },
-                            { PositionStrength.ThirdLine, 64 },
+                            { PositionStrength.SecondLine, 20 },
+                            { PositionStrength.ThirdLine, 65 },
                             { PositionStrength.FourthLine, 5 }
                         }
                     }
@@ -1688,8 +1680,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 20 },
-                            { PositionStrength.Elite, 80 }
+                            { PositionStrength.Generational, 35 },
+                            { PositionStrength.Elite, 65 }
                         }
                     }
                 },
@@ -1698,9 +1690,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Generational, 5 },
-                            { PositionStrength.Elite, 80 },
-                            { PositionStrength.FirstPair, 15 }
+                            { PositionStrength.Generational, 10 },
+                            { PositionStrength.Elite, 90 }
                         }
                     }
                 },
@@ -1709,8 +1700,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 40 },
-                            { PositionStrength.FirstPair, 60 }
+                            { PositionStrength.Elite, 60 },
+                            { PositionStrength.FirstPair, 40 }
                         }
                     }
                 },
@@ -1719,9 +1710,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 25 },
-                            { PositionStrength.FirstPair, 70 },
-                            { PositionStrength.SecondPair, 5 }
+                            { PositionStrength.Elite, 40 },
+                            { PositionStrength.FirstPair, 60}
                         }
                     }
                 },
@@ -1730,9 +1720,8 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 12 },
-                            { PositionStrength.FirstPair, 65 },
-                            { PositionStrength.SecondPair, 23 }
+                            { PositionStrength.Elite, 25 },
+                            { PositionStrength.FirstPair, 75 }
                         }
                     }
                 },
@@ -1742,8 +1731,7 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 10 },
-                            { PositionStrength.FirstPair, 60 },
-                            { PositionStrength.SecondPair, 30 }
+                            { PositionStrength.FirstPair, 90 }
                         }
                     }
                 },
@@ -1752,9 +1740,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstPair, 50 },
-                            { PositionStrength.SecondPair, 45 }
+                            { PositionStrength.Elite, 10 },
+                            { PositionStrength.FirstPair, 65 },
+                            { PositionStrength.SecondPair, 25 }
                         }
                     }
                 },
@@ -1763,9 +1751,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
+                            { PositionStrength.Elite, 7 },
                             { PositionStrength.FirstPair, 40 },
-                            { PositionStrength.SecondPair, 55 }
+                            { PositionStrength.SecondPair, 53 }
                         }
                     }
                 },
@@ -1774,9 +1762,9 @@ namespace EHMAssistant
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
-                            { PositionStrength.Elite, 5 },
-                            { PositionStrength.FirstPair, 30 },
-                            { PositionStrength.SecondPair, 65 }
+                            { PositionStrength.Elite, 6 },
+                            { PositionStrength.FirstPair, 35 },
+                            { PositionStrength.SecondPair, 59 }
                         }
                     }
                 },
@@ -2050,7 +2038,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 55 },
+                            { PositionStrength.ThirdPair, 60 },
                             { PositionStrength.AHL, 20 }
                         }
                     }
@@ -2063,7 +2051,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 55 },
+                            { PositionStrength.ThirdPair, 60 },
                             { PositionStrength.AHL, 20 }
                         }
                     }
@@ -2076,7 +2064,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 55 },
+                            { PositionStrength.ThirdPair, 60 },
                             { PositionStrength.AHL, 20 }
                         }
                     }
@@ -2089,7 +2077,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 50 },
+                            { PositionStrength.ThirdPair, 55 },
                             { PositionStrength.AHL, 25 }
                         }
                     }
@@ -2102,7 +2090,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 50 },
+                            { PositionStrength.ThirdPair, 55 },
                             { PositionStrength.AHL, 25 }
                         }
                     }

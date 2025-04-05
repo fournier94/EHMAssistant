@@ -44,7 +44,7 @@ namespace EHMAssistant
             try
             {
                 // Read all lines from the file
-                allFileLines = File.ReadAllLines(filePath);
+                allFileLines = File.ReadAllLines(filePath, Encoding.GetEncoding(1252));
 
                 // Skip the first line as specified
                 if (allFileLines.Length <= 1)
@@ -98,15 +98,11 @@ namespace EHMAssistant
 
             try
             {
-                // Make a backup of the file
-                string backupPath = $"{currentFilePath}.backup_{DateTime.Now:yyyyMMdd_HHmmss}";
-                File.Copy(currentFilePath, backupPath);
-
                 // Update player stats in the file
                 UpdatePlayersInFile();
 
                 // Write the updated file
-                File.WriteAllLines(currentFilePath, allFileLines);
+                File.WriteAllLines(currentFilePath, allFileLines, Encoding.GetEncoding(1252));
             }
             catch (Exception ex)
             {

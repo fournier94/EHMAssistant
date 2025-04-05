@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using EHMAssistant.ModifyRoster;
 
 namespace EHMAssistant
 {
@@ -15,6 +17,7 @@ namespace EHMAssistant
         public MainMenu()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen; // Center the window
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -62,24 +65,44 @@ namespace EHMAssistant
             // Show the GenerateDraft form
             draftForm.Show();
 
-            // When GenerateDraft closes, close the MainMenu as well
-            draftForm.FormClosed += (s, args) => this.Close();
+            // When GenerateDraft closes, show the MainMenu again
+            draftForm.FormClosed += (s, args) => this.Show();
         }
 
-        // Vrais joueurs
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    // Create the MenuDraftReel form
-        //    var draftReelForm = new EHMAssistant.MenuDraftReel();
+        private void button2_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // Set filter to only show .ehm files
+                openFileDialog.Filter = "EHM Files (*.ehm)|*.ehm";
+                openFileDialog.Title = "Veuillez selectionner votre fichier players.ehm";
 
-        //    // Hide the current form (MainMenu)
-        //    this.Hide();
+                // Show dialog and check if the user selected a file
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the selected file path
+                    string filePath = openFileDialog.FileName;
 
-        //    // Show the MenuDraftReel form
-        //    draftReelForm.Show();
+                    try
+                    {
+                        // Read all content from the file
+                        string fileContent = File.ReadAllText(filePath);
 
-        //    // When MenuDraftReel closes, show the MainMenu again
-        //    draftReelForm.FormClosed += (s, args) => this.Show();
-        //}
+                        // Example: Process the file content
+                        ProcessEHMFile(fileContent);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error reading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void ProcessEHMFile(string content)
+        {
+            var rosterMenu = new RosterMenu();
+            rosterMenu.Show();
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace EHMAssistant
     "Forest", "Foster", "Frank", "Freddie", "Garrett", "Gordon", "Graham", "Grant", "Greyson",
     "Griffin", "Harold", "Harris", "Heath", "Holden", "Hugo", "Ian", "Ignacio", "Irving", "Ivan",
     "Jedidiah", "Jeffrey", "Jennings", "Jerome", "Joaquin", "Johan", "Kaden", "Kane", "Kendrick",
-    "Lachlan", "Laurence", "Lawrence", "Leon", "Lionel", "Marco", "Maurice", "Milton"
+    "Lachlan", "Laurence", "Lawrence", "Leon", "Lionel", "Marco", "Maurice", "Milton", "Rax", "Dave", "Brett"
 }},
 {CountryGenerator.Country.UnitedStates, new List<string> {
     "Aaron", "Adam", "Adrian", "Aiden", "Alexander", "Andrew", "Anthony", "Ashton", "Austin",
@@ -134,7 +134,7 @@ namespace EHMAssistant
     "Grenier", "Hebert", "Gauthier", "Robitaille", "Roy", "Simard", "Boutin", "Tremblay", "Thibault", "Vachon",
     "Brisson", "Gendron", "Brunet", "Gravel", "Vallee", "Girard", "Lafleur", "Laporte", "Marchand", "Gravel",
     "Harvey", "Michaud", "Chabot", "Coutu", "Bourgault", "Allaire", "Levesque", "Gagne", "Gosselin", "Plante",
-    "Lemoine", "Chartrand"
+    "Lemoine", "Chartrand", "Melis", "Fournier", "Langlois", "Belhumeur", "Nadeau"
 }},
 {CountryGenerator.Country.UnitedStates, new List<string> {
     "Adams", "Allen", "Anderson", "Baker", "Barnes", "Bell", "Bennett", "Black", "Blake", "Brooks",

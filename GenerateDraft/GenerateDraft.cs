@@ -41,8 +41,9 @@ namespace EHMAssistant
         private RichTextBox draftListBox;
         private Button copyDraftListButton;
         #endregion
-
+        
         #region Variables | Sorting columns 
+        private System.Windows.Forms.Timer unselectTimer;
         private bool sortedOnce = false; // Used to reset sorting after generating a new draft
         private bool ascendingSort = true;  // Track sort direction
         private string currentSortColumn = "";  // Track which column we're sorting by
@@ -52,6 +53,7 @@ namespace EHMAssistant
         public GenerateDraft()
         {
             InitializeComponent();
+            InitializeTimer();
 
             this.StartPosition = FormStartPosition.CenterScreen;  // This centers the form
             this.MinimumSize = new Size(800, 600);  // Keep your minimum size
@@ -67,6 +69,33 @@ namespace EHMAssistant
             InitializePlayerListView();
             InitializeFinalStatsGridView();
             InitializeDraftListView();
+        }
+
+        private void InitializeTimer()
+        {
+            unselectTimer = new System.Windows.Forms.Timer();
+            unselectTimer.Interval = 10; // 10 milliseconds delay
+            unselectTimer.Tick += UnselectTimer_Tick;
+            unselectTimer.Enabled = false;
+        }
+
+        private void UnselectTimer_Tick(object sender, EventArgs e)
+        {
+            // Stop the timer
+            unselectTimer.Stop();
+
+            // Now unselect the cell safely
+            try
+            {
+                if (playersGridView != null)
+                {
+                    playersGridView.CurrentCell = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error unselecting cell: {ex.Message}");
+            }
         }
         #endregion
 
@@ -186,7 +215,7 @@ namespace EHMAssistant
             // Create the Update Players button - positioned on far right
             Button btnUpdatePlayers = new Button
             {
-                Text = "Sauvegarder dans le fichier de jeu",
+                Text = "Transferer vers players.ehm",
                 Size = new Size(180, 50),
                 BackColor = Color.White,
                 Anchor = AnchorStyles.Right // This will anchor it to the right of the form
@@ -278,7 +307,7 @@ namespace EHMAssistant
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "EHM Files (*.ehm)|*.ehm|All Files (*.*)|*.*";
-                openFileDialog.Title = "Sélectionnez un fichier EHM";
+                openFileDialog.Title = "Sélectionnez le fichier players.ehm";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -352,141 +381,295 @@ namespace EHMAssistant
                 BackColor = Color.White
             };
 
-            // Initialize the DataGridView (your existing DataGridView initialization code)
+            // Initialize the DataGridView
             playersGridView = new DataGridView();
             playersGridView.Dock = DockStyle.Fill;
-            playersGridView.AutoGenerateColumns = false;  // This prevents showing all properties
+            playersGridView.AutoGenerateColumns = false;
             playersGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             playersGridView.AllowUserToAddRows = false;
             playersGridView.AllowUserToDeleteRows = false;
-            playersGridView.ReadOnly = true;
-            playersGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            playersGridView.SelectionMode = DataGridViewSelectionMode.CellSelect; // <== CHANGED
             playersGridView.MultiSelect = false;
             playersGridView.RowHeadersVisible = false;
             playersGridView.BackgroundColor = Color.White;
             playersGridView.BorderStyle = BorderStyle.None;
             playersGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            // Center-align the header text
             playersGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            playersGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold); // Optional: Adjust header font
-
-            // Center-align the cell text
+            playersGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
             playersGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             playersGridView.ColumnHeaderMouseClick += PlayersGridView_ColumnHeaderMouseClick;
 
-            // Define only the requested columns
+            // Add event handler for row selection based on combo box clicks
+            playersGridView.CellMouseDown += PlayersGridView_CellMouseDown;
+
+            // Define columns
             playersGridView.Columns.AddRange(new DataGridViewColumn[]
             {
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Rank",
-            DataPropertyName = "Rank",
-            HeaderText = "Rang",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Name",
-            DataPropertyName = "Name",
-            HeaderText = "Nom",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Country",
-            DataPropertyName = "PlayerCountry",
-            HeaderText = "Pays",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Position",
-            DataPropertyName = "PlayerPosition",
-            HeaderText = "Position",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Height",
-            DataPropertyName = "Height",
-            HeaderText = "Taille",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Type",
-            DataPropertyName = "PlayerType",
-            HeaderText = "Type du joueur",
-            Width = 100,
-            CellTemplate = new DataGridViewTextBoxCell()
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Strength",
-            DataPropertyName = "PositionStrength",
-            HeaderText = "Force du joueur",
-            Width = 120
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Offense",
-            DataPropertyName = "Offense",
-            HeaderText = "Offense",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Defense",
-            DataPropertyName = "Defense",
-            HeaderText = "Defense",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        },
-        new DataGridViewTextBoxColumn
-        {
-            Name = "Overall",
-            DataPropertyName = "Overall",
-            HeaderText = "Overall",
-            AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        }
+        new DataGridViewTextBoxColumn { Name = "Rank", DataPropertyName = "Rank", HeaderText = "Rang", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Name", DataPropertyName = "Name", HeaderText = "Nom", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Country", HeaderText = "Pays", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Position", HeaderText = "Position", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Height", DataPropertyName = "Height", HeaderText = "Taille", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Type", HeaderText = "Type du joueur", Width = 100, CellTemplate = new DataGridViewTextBoxCell() },
+        new DataGridViewComboBoxColumn { Name = "Strength", HeaderText = "Force du joueur", Width = 120, DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton, FlatStyle = FlatStyle.Standard },
+        new DataGridViewTextBoxColumn { Name = "Offense", DataPropertyName = "Offense", HeaderText = "Offense", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Defense", DataPropertyName = "Defense", HeaderText = "Defense", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells },
+        new DataGridViewTextBoxColumn { Name = "Overall", DataPropertyName = "Overall", HeaderText = "Overall", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells }
             });
+
+            playersGridView.ReadOnly = false;
+
+            // Set all columns except "Strength" as read-only
+            foreach (DataGridViewColumn col in playersGridView.Columns)
+            {
+                if (col.Name != "Strength")
+                {
+                    col.ReadOnly = true;
+                }
+            }
+
+            // Ensure Strength column is editable
+            DataGridViewComboBoxColumn strengthColumn = playersGridView.Columns["Strength"] as DataGridViewComboBoxColumn;
+            if (strengthColumn != null)
+            {
+                strengthColumn.ReadOnly = false;
+            }
 
             // Add the DataGridView to the Panel
             playerListPanel.Controls.Add(playersGridView);
-
-            // Add the Panel to the players TabPage instead of the form
             overviewTabPage.Controls.Add(playerListPanel);
-
-            // Optional: Set minimum form size to prevent too much squishing
             this.MinimumSize = new Size(800, 600);
 
-            // Bind the data
+            // Bind data and populate the Strength column
             BindPlayerData();
+
+            playersGridView.EditingControlShowing += PlayersGridView_EditingControlShowing;
+            playersGridView.CellValueChanged += PlayersGridView_CellValueChanged;
+            playersGridView.CurrentCellDirtyStateChanged += PlayersGridView_CurrentCellDirtyStateChanged;
+
+            foreach (DataGridViewColumn column in playersGridView.Columns)
+            {
+                // Enable sorting for all columns
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+
+        private void ComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            // First commit the edit to ensure the value is saved
+            playersGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+            // Start the timer to unselect after a brief delay
+            unselectTimer.Start();
+        }
+
+        private void PlayersGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0) // Ensure a valid cell was clicked
+            {
+                DataGridViewColumn column = playersGridView.Columns[e.ColumnIndex];
+
+                // Only select the row if clicking on the Strength column
+                if (column.Name == "Strength")
+                {
+                    playersGridView.ClearSelection(); // Deselect everything first
+                    playersGridView.Rows[e.RowIndex].Selected = true; // Select the row
+                    playersGridView.CurrentCell = playersGridView.Rows[e.RowIndex].Cells[e.ColumnIndex]; // Focus on the combo box
+                }
+            }
+        }
+
+        private void PlayersGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (playersGridView.CurrentCell.ColumnIndex == playersGridView.Columns["Strength"].Index)
+            {
+                if (e.Control is ComboBox comboBox)
+                {
+                    // Remove previous event handlers to prevent duplicate bindings
+                    comboBox.DropDown -= ComboBox_DropDown;
+                    comboBox.DropDownClosed -= ComboBox_DropDownClosed;
+
+                    // Attach event handlers
+                    comboBox.DropDown += ComboBox_DropDown;
+                    comboBox.DropDownClosed += ComboBox_DropDownClosed;
+
+                    // Open the drop-down automatically
+                    comboBox.DroppedDown = true;
+                }
+            }
+        }
+
+        private void ComboBox_DropDown(object sender, EventArgs e)
+        {
+            Console.WriteLine("ComboBox drop-down opened.");
         }
 
         private void BindPlayerData()
         {
             var sortedPlayers = players.OrderBy(p => p.Rank).ToList();
 
-            // Create a list of anonymous objects to bind to the grid, replacing the enum with the display string
-            var displayPlayers = sortedPlayers.Select(player => new
-            {
-                player.Rank,
-                player.Name,
-                PlayerCountry = GetCountryString(player.PlayerCountry),
-                PlayerPosition = GetPositionConcatenatedString(player.PlayerPosition, player),
-                player.Height,
-                PlayerType = GetPlayerTypeString(player.PlayerType),
-                PositionStrength = GetStrengthString(player.PositionStrength),
-                player.Offense,
-                player.Defense,
-                player.Overall
-            }).ToList();
-
+            // Create a binding source that points directly to players list
             BindingSource bindingSource = new BindingSource();
-            bindingSource.DataSource = displayPlayers;
+            bindingSource.DataSource = sortedPlayers;
             playersGridView.DataSource = bindingSource;
+
+            // Set up custom cell formatting for the columns that need string conversion
+            playersGridView.CellFormatting += PlayersGridView_CellFormatting;
+
+            // Populate strength options for each row after binding data
+            PopulateStrengthComboBoxItemsForAllRows();
+        }
+
+        private void PopulateStrengthComboBoxItemsForAllRows()
+        {
+            DataGridViewComboBoxColumn strengthColumn = playersGridView.Columns["Strength"] as DataGridViewComboBoxColumn;
+            if (strengthColumn == null) return;
+
+            // For each row in the grid
+            for (int rowIndex = 0; rowIndex < playersGridView.Rows.Count; rowIndex++)
+            {
+                // Get the player from the binding source
+                var bindingSource = (BindingSource)playersGridView.DataSource;
+                Player player = (Player)bindingSource[rowIndex];
+
+                // Get the combo box cell 
+                DataGridViewComboBoxCell comboCell =
+                    (DataGridViewComboBoxCell)playersGridView.Rows[rowIndex].Cells["Strength"];
+
+                // Clear any existing items (in case we're refreshing)
+                comboCell.Items.Clear();
+
+                // Add common items
+                comboCell.Items.Add("Générationnel");
+                comboCell.Items.Add("Élite");
+
+                // Add position-specific items
+                if (player.PlayerPosition == PositionGenerator.Position.Center ||
+                    player.PlayerPosition == PositionGenerator.Position.Winger)
+                {
+                    comboCell.Items.Add("Première ligne");
+                    comboCell.Items.Add("Deuxième ligne");
+                    comboCell.Items.Add("Troisième ligne");
+                    comboCell.Items.Add("Quatrième ligne");
+                }
+                else if (player.PlayerPosition == PositionGenerator.Position.Defenseman)
+                {
+                    comboCell.Items.Add("Première paire");
+                    comboCell.Items.Add("Deuxième paire");
+                    comboCell.Items.Add("Troisième paire");
+                }
+                else if (player.PlayerPosition == PositionGenerator.Position.Goaltender)
+                {
+                    comboCell.Items.Add("Gardien partant");
+                    comboCell.Items.Add("Gardien auxiliaire");
+                }
+
+                comboCell.Items.Add("AHL");
+
+                // Set the value to match the player's current PositionStrength
+                comboCell.Value = GetStrengthString(player.PositionStrength);
+            }
+        }
+
+        // This ensures immediate commit of the combo box value change
+        private void PlayersGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (playersGridView.IsCurrentCellDirty &&
+                playersGridView.CurrentCell.OwningColumn.Name == "Strength" &&
+                playersGridView.CurrentCell is DataGridViewComboBoxCell)
+            {
+                playersGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void PlayersGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the changed cell is in the Strength column
+            if (e.RowIndex >= 0 && playersGridView.Columns[e.ColumnIndex].Name == "Strength")
+            {
+                // Get the selected string value
+                string selectedStrength = playersGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string;
+                if (!string.IsNullOrEmpty(selectedStrength))
+                {
+                    // Get the player from the binding source
+                    var bindingSource = (BindingSource)playersGridView.DataSource;
+                    Player player = (Player)bindingSource[e.RowIndex];
+
+                    // Convert string to enum value and update the player
+                    player.PositionStrength = GetPositionStrengthFromString(selectedStrength);
+                    UpdatePlayerStats(player);
+
+                    // Optionally refresh the grid or just the affected row
+                    playersGridView.InvalidateRow(e.RowIndex);
+                }
+            }
+        }
+
+        private void UpdatePlayerStats(Player player)
+        {
+            ResetPlayerStats(player);
+
+            _baseAttributesGenerator.SetPlayerBaseAttributes(player);
+            var (targetOff, targetDef) = _playerTargetAttributes.GetTargets(player.PlayerType, player.PositionStrength);
+            player.TargetOffense = targetOff;
+            player.TargetDefense = targetDef;
+
+            if (player.PlayerType != PlayerTypeGenerator.PlayerType.Gardien)
+            {
+                DistributeOffensiveAttributes(player);
+                DistributeDefensiveAttributes(player);
+                DistributeOtherAttributes(player);
+            }
+            DistributeStartingAttributes(player);
+        }
+
+        private void ResetPlayerStats(Player player)
+        {
+            player.Fighting = 0;
+            player.Shooting = 0;
+            player.Playmaking = 0;
+            player.Stickhandling = 0;
+            player.Checking = 0;
+            player.Positioning = 0;
+            player.Hitting = 0;
+            player.Skating = 0;
+            player.Endurance = 0;
+            player.Penalty = 0;
+            player.Faceoffs = 0;
+            player.Leadership = 0;
+            player.AttributeStrength = 0;
+            player.Constance = 0;
+            player.Potential = 0;
+        }
+
+        private void PlayersGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Only format the specific columns that need custom display strings
+            if (e.RowIndex >= 0)
+            {
+                Player player = (Player)((BindingSource)playersGridView.DataSource)[e.RowIndex];
+
+                switch (playersGridView.Columns[e.ColumnIndex].Name)
+                {
+                    case "Country":
+                        e.Value = GetCountryString(player.PlayerCountry);
+                        e.FormattingApplied = true;
+                        break;
+                    case "Position":
+                        e.Value = GetPositionConcatenatedString(player.PlayerPosition, player);
+                        e.FormattingApplied = true;
+                        break;
+                    case "Type":
+                        e.Value = GetPlayerTypeString(player.PlayerType);
+                        e.FormattingApplied = true;
+                        break;
+                    case "Strength":
+                        e.Value = GetStrengthString(player.PositionStrength);
+                        e.FormattingApplied = true;
+                        break;
+                }
+            }
         }
 
         private void PlayersGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -512,73 +695,73 @@ namespace EHMAssistant
                 }
 
                 var bindingSource = (BindingSource)playersGridView.DataSource;
-                var data = (IEnumerable<dynamic>)bindingSource.DataSource;
+                var data = (IEnumerable<Player>)bindingSource.DataSource;  // Now working with Player objects directly
 
-                // Sort based on the column
-                List<dynamic> sortedData;
+                // Sort logic (unchanged)...
+                List<Player> sortedData;
                 if (currentSortColumn == "Rank")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => x.Rank).ToList()
-                        : data.OrderByDescending(x => x.Rank).ToList();
+                        ? data.OrderBy(p => p.Rank).ToList()
+                        : data.OrderByDescending(p => p.Rank).ToList();
                 }
                 else if (currentSortColumn == "Country")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => x.PlayerCountry).ToList()
-                        : data.OrderByDescending(x => x.PlayerCountry).ToList();
+                        ? data.OrderBy(p => GetCountryString(p.PlayerCountry)).ToList()
+                        : data.OrderByDescending(p => GetCountryString(p.PlayerCountry)).ToList();
                 }
                 else if (currentSortColumn == "Name")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => x.Name).ToList()
-                        : data.OrderByDescending(x => x.Name).ToList();
+                        ? data.OrderBy(p => p.Name).ToList()
+                        : data.OrderByDescending(p => p.Name).ToList();
                 }
                 else if (currentSortColumn == "Height")
                 {
                     // Convert height to total inches before sorting
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => ConvertHeightToInches(x.Height)).ToList()
-                        : data.OrderByDescending(x => ConvertHeightToInches(x.Height)).ToList();
+                        ? data.OrderBy(p => ConvertHeightToInches(p.Height)).ToList()
+                        : data.OrderByDescending(p => ConvertHeightToInches(p.Height)).ToList();
                 }
                 else if (currentSortColumn == "Position")
                 {
                     // Sort positions using the defined order
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => GetPositionSortValue(x.PlayerPosition)).ToList()
-                        : data.OrderByDescending(x => GetPositionSortValue(x.PlayerPosition)).ToList();
+                        ? data.OrderBy(p => GetPositionSortValue(GetPositionConcatenatedString(p.PlayerPosition, p))).ToList()
+                        : data.OrderByDescending(p => GetPositionSortValue(GetPositionConcatenatedString(p.PlayerPosition, p))).ToList();
                 }
                 else if (currentSortColumn == "Type")
                 {
                     // Sort positions using the defined order
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => GetTypeSortValue(x.PlayerType)).ToList()
-                        : data.OrderByDescending(x => GetTypeSortValue(x.PlayerType)).ToList();
+                        ? data.OrderBy(p => GetTypeSortValue(GetPlayerTypeString(p.PlayerType))).ToList()
+                        : data.OrderByDescending(p => GetTypeSortValue(GetPlayerTypeString(p.PlayerType))).ToList();
                 }
                 else if (currentSortColumn == "Strength")
                 {
                     // Sort positions using the defined order
                     sortedData = ascendingSort
-                        ? data.OrderBy(x => GetPositionStrengthSortValue(x.PositionStrength)).ToList()
-                        : data.OrderByDescending(x => GetPositionStrengthSortValue(x.PositionStrength)).ToList();
+                        ? data.OrderBy(p => GetPositionStrengthSortValue(GetStrengthString(p.PositionStrength))).ToList()
+                        : data.OrderByDescending(p => GetPositionStrengthSortValue(GetStrengthString(p.PositionStrength))).ToList();
                 }
                 else if (currentSortColumn == "Offense")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderByDescending(x => x.Offense).ToList()
-                        : data.OrderBy(x => x.Offense).ToList();
+                        ? data.OrderByDescending(p => p.Offense).ToList()
+                        : data.OrderBy(p => p.Offense).ToList();
                 }
                 else if (currentSortColumn == "Defense")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderByDescending(x => x.Defense).ToList()
-                        : data.OrderBy(x => x.Defense).ToList();
+                        ? data.OrderByDescending(p => p.Defense).ToList()
+                        : data.OrderBy(p => p.Defense).ToList();
                 }
                 else if (currentSortColumn == "Overall")
                 {
                     sortedData = ascendingSort
-                        ? data.OrderByDescending(x => x.Overall).ToList()
-                        : data.OrderBy(x => x.Overall).ToList();
+                        ? data.OrderByDescending(p => p.Overall).ToList()
+                        : data.OrderBy(p => p.Overall).ToList();
                 }
                 else
                 {
@@ -597,6 +780,9 @@ namespace EHMAssistant
                 // Set the sort glyph for the current column
                 clickedColumn.HeaderCell.SortGlyphDirection =
                     ascendingSort ? SortOrder.Ascending : SortOrder.Descending;
+
+                // Repopulate the combo boxes after sorting
+                PopulateStrengthComboBoxItemsForAllRows();
             }
         }
 
@@ -1321,25 +1507,60 @@ namespace EHMAssistant
 
             StringBuilder sb = new StringBuilder();
 
+            // Start the HTML structure
+            sb.Append("<!DOCTYPE html>");
+            sb.Append("<html lang=\"fr\">");
+            sb.Append("<head>");
+            sb.Append("<meta charset=\"UTF-8\">");
+            sb.Append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+            sb.Append("<title>Draft</title>");
+            sb.Append("<style>");
+            sb.Append("table { border-collapse: collapse; width: 100%; }");
+            sb.Append("th, td { border: 1px solid black; padding: 8px; text-align: center; }");
+            sb.Append("th { background-color: #f2f2f2; }");
+            sb.Append("</style>");
+            sb.Append("</head>");
+            sb.Append("<body>");
+            sb.Append("<table>");
+
+            // Table header
+            sb.Append("<thead><tr>");
+            sb.Append("<th>#</th>");
+            sb.Append("<th>Nom</th>");
+            sb.Append("<th>Nation</th>");
+            sb.Append("<th>Position</th>");
+            sb.Append("<th>Taille</th>");
+            sb.Append("<th>Style</th>");
+            sb.Append("<th>Potentiel</th>");
+            sb.Append("</tr></thead>");
+
+            // Table body
+            sb.Append("<tbody>");
+
             // Sort players by rank
             var sortedPlayers = players.OrderBy(p => p.Rank).ToList();
 
             foreach (var player in sortedPlayers)
             {
-                // Format each player's information including PlayerType
-                string playerInfo = string.Format("{0,3}. {1} {2} {3} - {4} - {5} ----- {6}\n",
-                player.Rank,
-                player.Name,
-                GetCountryLogoString(player.PlayerCountry),
-                GetPositionConcatenatedString(player.PlayerPosition, player),
-                player.Height,
-                GetPlayerTypeString(player.PlayerType),
-                _strengthGen.GetStrengthOddsTranslated(player.PlayerPosition, player.Rank, GetStrengthString));
-
-                sb.Append(playerInfo);
+                // Generate the row for each player
+                sb.Append("<tr>");
+                sb.Append($"<td>{player.Rank}</td>");
+                sb.Append($"<td>{player.Name}</td>");
+                sb.Append($"<td>{GetCountryLogoString(player.PlayerCountry)}</td>");
+                sb.Append($"<td>{GetPositionConcatenatedString(player.PlayerPosition, player)}</td>");
+                sb.Append($"<td>{player.Height}</td>");
+                sb.Append($"<td>{GetPlayerTypeString(player.PlayerType)}</td>");
+                sb.Append($"<td>{_strengthGen.GetStrengthOddsTranslated(player.PlayerPosition, player.Rank, GetStrengthString)}</td>");
+                sb.Append("</tr>");
             }
 
-            // Update the RichTextBox
+            // Close the table and HTML structure
+            sb.Append("</tbody>");
+            sb.Append("</table>");
+            sb.Append("</body>");
+            sb.Append("</html>");
+
+            // Update the RichTextBox or any other UI control
             if (draftListBox.InvokeRequired)
             {
                 draftListBox.Invoke(new Action(() => draftListBox.Text = sb.ToString()));
@@ -1427,6 +1648,40 @@ namespace EHMAssistant
                     return "AHL";
                 default:
                     return positionStrength.ToString();
+            }
+        }
+
+        // Convert display string to enum value
+        private PositionStrengthGenerator.PositionStrength GetPositionStrengthFromString(string strengthString)
+        {
+            switch (strengthString)
+            {
+                case "Générationnel":
+                    return PositionStrengthGenerator.PositionStrength.Generational;
+                case "Élite":
+                    return PositionStrengthGenerator.PositionStrength.Elite;
+                case "Première ligne":
+                    return PositionStrengthGenerator.PositionStrength.FirstLine;
+                case "Deuxième ligne":
+                    return PositionStrengthGenerator.PositionStrength.SecondLine;
+                case "Troisième ligne":
+                    return PositionStrengthGenerator.PositionStrength.ThirdLine;
+                case "Quatrième ligne":
+                    return PositionStrengthGenerator.PositionStrength.FourthLine;
+                case "AHL":
+                    return PositionStrengthGenerator.PositionStrength.AHL;
+                case "Première paire":
+                    return PositionStrengthGenerator.PositionStrength.FirstPair;
+                case "Deuxième paire":
+                    return PositionStrengthGenerator.PositionStrength.SecondPair;
+                case "Troisième paire":
+                    return PositionStrengthGenerator.PositionStrength.ThirdPair;
+                case "Gardien partant":
+                    return PositionStrengthGenerator.PositionStrength.Starter;
+                case "Gardien auxiliaire":
+                    return PositionStrengthGenerator.PositionStrength.Backup;
+                default:
+                    return PositionStrengthGenerator.PositionStrength.AHL; // Default value
             }
         }
 
@@ -1814,8 +2069,7 @@ namespace EHMAssistant
 
                 using (var generator = new SecureRandomGenerator())
                     shootingBoost = generator.GetRandomValue(0, firstValue + 1);
-                Console.WriteLine("firstValue : " + firstValue);
-                Console.WriteLine("shootingBoost : " + shootingBoost);
+
                 // int shootingBoost = GetSecureRandomValue(0, firstValue + 1);
 
                 remainingPoints -= shootingBoost;
@@ -1883,7 +2137,6 @@ namespace EHMAssistant
                     playmakingBoost = generator.GetRandomValue(0, firstValue + 1);
 
                 // int playmakingBoost = GetSecureRandomValue(0, firstValue + 1);
-                Console.WriteLine("playmakingBoost : " + playmakingBoost);
                 remainingPoints -= playmakingBoost;
 
                 if (player.Playmaking + playmakingBoost > 99)
@@ -1949,10 +2202,8 @@ namespace EHMAssistant
                     stickhandlingBoost = generator.GetRandomValue(0, firstValue + 1);
 
                 // int stickhandlingBoost = GetSecureRandomValue(0, firstValue + 1);
-                Console.WriteLine("random stickhandlingBoost : " + stickhandlingBoost);
 
                 remainingPoints -= stickhandlingBoost;
-                Console.WriteLine("remainingPoints : " + remainingPoints);
                 if (player.Stickhandling + stickhandlingBoost > 99)
                 {
                     int stickhandlingBeforeReduction = player.Stickhandling + stickhandlingBoost;
@@ -2191,12 +2442,11 @@ namespace EHMAssistant
 
                 using (var generator = new SecureRandomGenerator())
                     checkingBoost = generator.GetRandomValue(0, firstValue + 1);
-                Console.WriteLine("firstValue : " + firstValue);
-                Console.WriteLine("checkingBoost : " + checkingBoost);
+
                 // int CheckingBoost = GetSecureRandomValue(0, firstValue + 1);
 
                 remainingPoints -= checkingBoost;
-                Console.WriteLine("remainingPoints : " + remainingPoints);
+
                 if (player.Checking + checkingBoost > 99)
                 {
                     int checkingBeforeReduction = player.Checking + checkingBoost;
@@ -2260,9 +2510,7 @@ namespace EHMAssistant
                     PositioningBoost = generator.GetRandomValue(0, firstValue + 1);
 
                 // int PositioningBoost = GetSecureRandomValue(0, firstValue + 1);
-                Console.WriteLine("PositioningBoost : " + PositioningBoost);
                 remainingPoints -= PositioningBoost;
-                Console.WriteLine("remainingPoints : " + remainingPoints);
                 if (player.Positioning + PositioningBoost > 99)
                 {
                     int PositioningBeforeReduction = player.Positioning + PositioningBoost;
@@ -2326,10 +2574,8 @@ namespace EHMAssistant
                     HittingBoost = generator.GetRandomValue(0, firstValue + 1);
 
                 // int HittingBoost = GetSecureRandomValue(0, firstValue + 1);
-                Console.WriteLine("HittingBoost : " + HittingBoost);
 
                 remainingPoints -= HittingBoost;
-                Console.WriteLine("remainingPoints : " + remainingPoints);
                 if (player.Hitting + HittingBoost > 99)
                 {
                     int HittingBeforeReduction = player.Hitting + HittingBoost;
@@ -2677,13 +2923,13 @@ namespace EHMAssistant
         {
             if (player.Height == "5'9\"" || player.Height == "5'10\"")
             {
-                player.Skating += 3;
-                player.AttributeStrength -= 3;
+                player.Skating += 4;
+                player.AttributeStrength -= 4;
             }
             if (player.Height == "5'11\"")
             {
-                player.Skating += 2;
-                player.AttributeStrength -= 2;
+                player.Skating += 3;
+                player.AttributeStrength -= 3;
             }
             if (player.Height == "6'2\"" || player.Height == "6'3\"")
             {
@@ -2692,13 +2938,13 @@ namespace EHMAssistant
             }
             if (player.Height == "6'4\"" || player.Height == "6'5\"")
             {
-                player.Skating -= 3;
-                player.AttributeStrength += 3;
+                player.Skating -= 4;
+                player.AttributeStrength += 4;
             }
             if (player.Height == "6'6\"" || player.Height == "6'7\"" || player.Height == "6'8\"")
             {
-                player.Skating -= 4;
-                player.AttributeStrength += 4;
+                player.Skating -= 5;
+                player.AttributeStrength += 5;
             }
         }
         #endregion

@@ -20,113 +20,105 @@ namespace EHMAssistant
     {
         PlayerTypeGenerator.PlayerType.Sniper, new Dictionary<string, int>
         {
-            // 34% chance below 6'0"
-            { "5'9\"", 6 },
-            { "5'10\"", 12 },
-            { "5'11\"", 16 },
-            // 38% chance of being 6'0" or 6'1"
-            { "6'0\"", 21 },
-            { "6'1\"", 17 },
-            // 28% chance of being 6'2" and above
+            // 45% chance below 6'0"
+            { "5'9\"", 5 },
+            { "5'10\"", 16 },
+            { "5'11\"", 24 },
+            // 36% chance of being 6'0" or 6'1"
+            { "6'0\"", 20 },
+            { "6'1\"", 16 },
+            // 19% chance of being 6'2" and above
             { "6'2\"", 10 },
-            { "6'3\"", 7 },
-            { "6'4\"", 5 },
-            { "6'5\"", 2 },
-            { "6'6\"", 2 },
+            { "6'3\"", 5 },
+            { "6'4\"", 1 },
+            { "6'5\"", 1 },
+            { "6'6\"", 1 },
             { "6'7\"", 1 },
-            { "6'8\"", 1 }
+            { "6'8\"", 0 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.FabricantDeJeu, new Dictionary<string, int>
         {
-            // 34% chance below 6'0"
-            { "5'9\"", 6 },
-            { "5'10\"", 12 },
-            { "5'11\"", 16 },
-            // 38% chance of being 6'0" or 6'1"
-            { "6'0\"", 21 },
-            { "6'1\"", 17 },
-            // 28% chance of being 6'2" and above
+            // 45% chance below 6'0"
+            { "5'9\"", 5 },
+            { "5'10\"", 16 },
+            { "5'11\"", 24 },
+            // 36% chance of being 6'0" or 6'1"
+            { "6'0\"", 20 },
+            { "6'1\"", 16 },
+            // 19% chance of being 6'2" and above
             { "6'2\"", 10 },
-            { "6'3\"", 7 },
-            { "6'4\"", 5 },
-            { "6'5\"", 2 },
-            { "6'6\"", 2 },
+            { "6'3\"", 5 },
+            { "6'4\"", 1 },
+            { "6'5\"", 1 },
+            { "6'6\"", 1 },
             { "6'7\"", 1 },
-            { "6'8\"", 1 }
+            { "6'8\"", 0 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.AttaquantOffensif, new Dictionary<string, int>
         {
-            // 34% chance below 6'0"
-            { "5'9\"", 6 },
-            { "5'10\"", 12 },
-            { "5'11\"", 16 },
-            // 38% chance of being 6'0" or 6'1"
-            { "6'0\"", 21 },
-            { "6'1\"", 17 },
-            // 28% chance of being 6'2" and above
+            // 45% chance below 6'0"
+            { "5'9\"", 5 },
+            { "5'10\"", 16 },
+            { "5'11\"", 24 },
+            // 36% chance of being 6'0" or 6'1"
+            { "6'0\"", 20 },
+            { "6'1\"", 16 },
+            // 19% chance of being 6'2" and above
             { "6'2\"", 10 },
-            { "6'3\"", 7 },
-            { "6'4\"", 5 },
-            { "6'5\"", 2 },
-            { "6'6\"", 2 },
+            { "6'3\"", 5 },
+            { "6'4\"", 1 },
+            { "6'5\"", 1 },
+            { "6'6\"", 1 },
             { "6'7\"", 1 },
-            { "6'8\"", 1 }
+            { "6'8\"", 0 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.AttaquantDePuissance, new Dictionary<string, int>
         {
             // Always minimum 6'2" for unrestricted hitting and SR
-            { "6'2\"", 29 },
-            { "6'3\"", 26 },
-            { "6'4\"", 24 },
-            { "6'5\"", 13 },
-            { "6'6\"", 5 },
-            { "6'7\"", 2 },
+            { "6'2\"", 40 },
+            { "6'3\"", 29 },
+            { "6'4\"", 19 },
+            { "6'5\"", 7 },
+            { "6'6\"", 3 },
+            { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, new Dictionary<string, int>
         {
-            // 12% chance below 6'0"
-            { "5'9\"", 1 },
-            { "5'10\"", 4 },
-            { "5'11\"", 7 },
-            // 35% chance of being 6'0" or 6'1"
-            { "6'0\"", 17 },
-            { "6'1\"", 18 },
-            // 53% chance of being 6'2" and above
-            { "6'2\"", 18 },
-            { "6'3\"", 14 },
-            { "6'4\"", 9 },
-            { "6'5\"", 5 },
-            { "6'6\"", 4 },
-            { "6'7\"", 2 },
+            // 60% chance of being 6'0" or 6'1"
+            { "6'0\"", 34 },
+            { "6'1\"", 26 },
+            // 40% chance of being 6'2" and above
+            { "6'2\"", 16 },
+            { "6'3\"", 11 },
+            { "6'4\"", 7 },
+            { "6'5\"", 3 },
+            { "6'6\"", 1 },
+            { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.JoueurDeCaractere, new Dictionary<string, int>
         {
-            // 15% chance below 6'0"
-            { "5'9\"", 2 },
-            { "5'10\"", 4 },
-            { "5'11\"", 9 },
-            // 30% chance of being 6'0" or 6'1"
-            { "6'0\"", 15 },
-            { "6'1\"", 19 },
-            // 55% chance of being 6'2" and above
-            { "6'2\"", 18 },
-            { "6'3\"", 14 },
-            { "6'4\"", 10 },
-            { "6'5\"", 6 },
-            { "6'6\"", 4 },
-            { "6'7\"", 2 },
+            // 50% chance of being 6'0" or 6'1"
+            { "6'0\"", 28 },
+            { "6'1\"", 22 },
+            // 50% chance of being 6'2" and above
+            { "6'2\"", 20 },
+            { "6'3\"", 16 },
+            { "6'4\"", 8 },
+            { "6'5\"", 3 },
+            { "6'6\"", 1 },
+            { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
     },
@@ -134,34 +126,34 @@ namespace EHMAssistant
         PlayerTypeGenerator.PlayerType.DefenseurOffensif, new Dictionary<string, int>
         {
             // 20% chance below 6'0"
-            { "5'9\"", 4 },
+            { "5'9\"", 2 },
             { "5'10\"", 7 },
-            { "5'11\"", 9 },
+            { "5'11\"", 11 },
             // 45% chance of being 6'0" or 6'1"
-            { "6'0\"", 20 },
-            { "6'1\"", 25 },
+            { "6'0\"", 21 },
+            { "6'1\"", 24 },
             // 35% chance of being 6'2" and above
-            { "6'2\"", 10 },
-            { "6'3\"", 10 },
-            { "6'4\"", 6 },
-            { "6'5\"", 3 },
-            { "6'6\"", 3 },
-            { "6'7\"", 2 },
-            { "6'8\"", 1 }
+            { "6'2\"", 16 },
+            { "6'3\"", 11 },
+            { "6'4\"", 5 },
+            { "6'5\"", 1 },
+            { "6'6\"", 1 },
+            { "6'7\"", 1 },
+            { "6'8\"", 0 }
         }
     },
     {
         PlayerTypeGenerator.PlayerType.DefenseurDefensif, new Dictionary<string, int>
         {
-            // 45% chance of being 6'0" or 6'1"
-            { "6'0\"", 20 },
+            // 40% chance of being 6'0" or 6'1"
+            { "6'0\"", 18 },
             { "6'1\"", 22 },
-            // 55% chance of being 6'2" and above
-            { "6'2\"", 20 },
-            { "6'3\"", 16 },
-            { "6'4\"", 10 },
-            { "6'5\"", 6 },
-            { "6'6\"", 4 },
+            // 60% chance of being 6'2" and above
+            { "6'2\"", 27 },
+            { "6'3\"", 18 },
+            { "6'4\"", 9 },
+            { "6'5\"", 3 },
+            { "6'6\"", 1 },
             { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
@@ -170,11 +162,11 @@ namespace EHMAssistant
         PlayerTypeGenerator.PlayerType.DefenseurPhysique, new Dictionary<string, int>
         {
             // Always minimum 6'2" for unrestricted hitting and SR
-            { "6'2\"", 31 },
-            { "6'3\"", 30 },
-            { "6'4\"", 20 },
-            { "6'5\"", 13 },
-            { "6'6\"", 4 },
+            { "6'2\"", 40 },
+            { "6'3\"", 29 },
+            { "6'4\"", 19 },
+            { "6'5\"", 7 },
+            { "6'6\"", 3 },
             { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
@@ -184,21 +176,21 @@ namespace EHMAssistant
         {
             { "5'9\"", 2 },
             { "5'10\"", 5 },
-            { "5'11\"", 8 },
-            { "6'0\"", 19 },
+            { "5'11\"", 9 },
+            { "6'0\"", 17 },
             { "6'1\"", 19 },
             { "6'2\"", 15 },
             { "6'3\"", 15 },
             { "6'4\"", 8 },
-            { "6'5\"", 4 },
+            { "6'5\"", 6 },
             { "6'6\"", 2 },
-            { "6'7\"", 2 },
+            { "6'7\"", 1 },
             { "6'8\"", 1 }
         }
     }
 };
         #endregion
-
+        
         #region Constructor
         public HeightGenerator()
         {

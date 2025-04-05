@@ -145,23 +145,23 @@ namespace EHMAssistant
             targets.Add((PlayerTypeGenerator.PlayerType.JoueurDeCaractere, PositionStrengthGenerator.PositionStrength.AHL), 
                 new AttributeTargets(69, 69, 4));
             #endregion
-
+            
             #region Defenseurs
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Generational), 
                 new AttributeTargets(91, 80, 5));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Elite), 
-                new AttributeTargets(88, 78, 4));
+                new AttributeTargets(87, 78, 4));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.FirstPair), 
-                new AttributeTargets(87, 76, 4));
+                new AttributeTargets(86, 76, 4));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.SecondPair), 
-                new AttributeTargets(85, 73, 4));
+                new AttributeTargets(83, 74, 4));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.ThirdPair), 
                 new AttributeTargets(80, 69, 5));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
 
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Generational), 
-                new AttributeTargets(82, 85, 6));
+                new AttributeTargets(82, 86, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Elite), 
                 new AttributeTargets(78, 84, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.FirstPair), 
@@ -174,7 +174,7 @@ namespace EHMAssistant
                 new AttributeTargets(69, 69, 4));
 
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurPhysique, PositionStrengthGenerator.PositionStrength.Generational),
-                new AttributeTargets(82, 85, 6));
+                new AttributeTargets(82, 86, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurPhysique, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(78, 84, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurPhysique, PositionStrengthGenerator.PositionStrength.FirstPair),
@@ -186,7 +186,7 @@ namespace EHMAssistant
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurPhysique, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
             #endregion
-
+            
             return targets;
         }
     }
