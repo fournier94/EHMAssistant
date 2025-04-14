@@ -8,7 +8,7 @@ namespace EHMAssistant
     class CountryGenerator
     {
         #region Variables
-        private readonly RNGCryptoServiceProvider _rng;
+        private readonly SecureRandomGenerator _randomGenerator;
 
         // Keep track of assigned countries
         private readonly Dictionary<Country, int> _assignedCountries;
@@ -39,10 +39,10 @@ namespace EHMAssistant
         // Target percentages for each country
         private readonly Dictionary<Country, int> _countryTargets = new Dictionary<Country, int>
         {
-            { Country.Canada, 40 },
-            { Country.UnitedStates, 27 },
-            { Country.Sweden, 9 },
-            { Country.Russia, 7 },
+            { Country.Canada, 37 },
+            { Country.UnitedStates, 26 },
+            { Country.Sweden, 10 },
+            { Country.Russia, 10 },
             { Country.Finland, 4 },
             { Country.CzechRepublic, 4 },
             { Country.Slovakia, 2 },
@@ -54,12 +54,12 @@ namespace EHMAssistant
             { Country.Slovenia, 1 }
         };
         #endregion
-
+        
 
         #region Constructor
         public CountryGenerator(int totalPlayers = 60)
         {
-            _rng = new RNGCryptoServiceProvider();
+            _randomGenerator = new SecureRandomGenerator();
             _totalPlayers = totalPlayers;
             _totalAssigned = 0;
 
@@ -104,35 +104,14 @@ namespace EHMAssistant
                 availableCountries = _countryTargets.Keys.ToList();
             }
 
-            // Select random country from available countries
-            Country selectedCountry = availableCountries[GetSecureRandomInt(0, availableCountries.Count)];
+            // Select random country from available countries using SecureRandomGenerator
+            Country selectedCountry = availableCountries[_randomGenerator.GetRandomValue(0, availableCountries.Count)];
 
             // Update counters
             _assignedCountries[selectedCountry]++;
             _totalAssigned++;
 
             return selectedCountry;
-        }
-
-        private int GetSecureRandomInt(int minValue, int maxValue)
-        {
-            if (minValue >= maxValue)
-                throw new ArgumentException("minValue must be less than maxValue");
-
-            byte[] randomBytes = new byte[4];
-            _rng.GetBytes(randomBytes);
-            int value = BitConverter.ToInt32(randomBytes, 0);
-
-            // We need to be careful with modulo bias here
-            int range = maxValue - minValue;
-            int max = int.MaxValue - (int.MaxValue % range);
-            while (value >= max)
-            {
-                _rng.GetBytes(randomBytes);
-                value = BitConverter.ToInt32(randomBytes, 0);
-            }
-
-            return minValue + (Math.Abs(value) % range);
         }
         #endregion
 
@@ -146,6 +125,13 @@ namespace EHMAssistant
                     (kvp.Value * 100.0 / _totalAssigned) : 0;
                 Console.WriteLine($"{kvp.Key}: {kvp.Value} players ({percentage:F1}%)");
             }
+        }
+        #endregion
+
+        #region IDisposable Implementation
+        public void Dispose()
+        {
+            _randomGenerator?.Dispose();
         }
         #endregion
     }

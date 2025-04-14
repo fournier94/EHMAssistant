@@ -8,11 +8,13 @@ namespace EHMAssistant
     class NameGenerator
     {
         #region Variables
-        private static RandomNumberGenerator random;
+        private static SecureRandomGenerator _secureRandom;
 
         // Static Dictionaries for country-specific names
         private static Dictionary<CountryGenerator.Country, List<string>> firstNamesByCountry;
         private static Dictionary<CountryGenerator.Country, List<string>> lastNamesByCountry;
+        private static List<string> frenchCanadianFirstNames;
+        private static List<string> frenchCanadianLastNames;
 
         // Set to track all used names globally
         private static HashSet<string> usedFirstNames;
@@ -21,7 +23,7 @@ namespace EHMAssistant
         // Dictionary for recently used names
         private static Dictionary<CountryGenerator.Country, List<string>> recentlyUsedNames;
         #endregion
-
+        
         #region Initialize lists of names by Country
         private static void InitializeNameLists()
         {
@@ -50,7 +52,7 @@ namespace EHMAssistant
     "Forest", "Foster", "Frank", "Freddie", "Garrett", "Gordon", "Graham", "Grant", "Greyson",
     "Griffin", "Harold", "Harris", "Heath", "Holden", "Hugo", "Ian", "Ignacio", "Irving", "Ivan",
     "Jedidiah", "Jeffrey", "Jennings", "Jerome", "Joaquin", "Johan", "Kaden", "Kane", "Kendrick",
-    "Lachlan", "Laurence", "Lawrence", "Leon", "Lionel", "Marco", "Maurice", "Milton", "Rax", "Dave", "Brett"
+    "Lachlan", "Laurence", "Lawrence", "Leon", "Lionel", "Marco", "Milton", "Dave", "Brett"
 }},
 {CountryGenerator.Country.UnitedStates, new List<string> {
     "Aaron", "Adam", "Adrian", "Aiden", "Alexander", "Andrew", "Anthony", "Ashton", "Austin",
@@ -113,28 +115,41 @@ namespace EHMAssistant
             lastNamesByCountry = new Dictionary<CountryGenerator.Country, List<string>>
     {
 {CountryGenerator.Country.Canada, new List<string> {
-    "Abadie", "Benoit", "Bergeron", "Bernier", "Bouchard", "Bourassa", "Brouillette", "Brunet", "Cameron", "Chabot",
-    "Charbonneau", "Chartier", "Charest", "Cloutier", "Cote", "D'Amours", "Desjardins", "Dube", "Dumont", "Dupuis",
-    "Gagne", "Gauthier", "Gendron", "Gibeault", "Girard", "Godin", "Gosselin", "Grenier", "Guerin", "Laflamme",
-    "Lafleur", "Lamarche", "Lemoine", "Lemoine", "Lemoine", "Lavoie", "Leclerc", "Lefebvre", "Lemieux", "Lepine",
-    "Levesque", "Lavigne", "Leduc", "Lemieux", "Lemoine", "Levesque", "Lefebvre", "Lafleur", "Laflamme", "Lavigne",
-    "Lemieux", "Lemoine", "Levesque", "Lefebvre", "Gauthier", "Leclerc", "Leduc", "Leclerc", "Levesque", "Lepine",
-    "Menard", "Michaud", "Menard", "Morin", "Nadeau", "Nault", "Ouellet", "Perron", "Plante", "Poisson",
-    "Proulx", "Racine", "Rivard", "Robitaille", "Roy", "Simard", "Tanguay", "Thibeault", "Tremblay", "Vachon",
-    "Vallieres", "Vezina", "Wheeler", "Yelle", "Ziegler", "Allard", "Angers", "Archambault", "Arsenault", "Belanger",
-    "Bergeron", "Boucher", "Bouchard", "Bourque", "Caron", "Charest", "Charbonneau", "Chauvin", "Cote", "David",
-    "Dufresne", "Ducharme", "Dufour", "Durand", "Duval", "Ethier", "Fournier", "Gaudreault", "Gagne", "Garneau",
-    "Gauthier", "Girard", "Gravel", "Gagnon", "Gagne", "Gerin", "Grenier", "Guerin", "Gosselin", "Guerin",
-    "Dion", "Desjardins", "Desrochers", "Dufresne", "Fournier", "Girard", "Gauthier", "Gilbert", "Gosselin", "Lambert",
-    "Lauzon", "Lefebvre", "Lemoine", "Levesque", "Michaud", "Morin", "Nadeau", "Perron", "Picard", "Plante",
-    "Poirier", "Racine", "Remillard", "Rivard", "Rousseau", "Tremblay", "Vachon", "Veronique", "Villeneuve", "Valois",
-    "Vallee", "Vallee", "Thibeault", "Trudeau", "Lafleur", "Lemoine", "Levesque", "Doucet", "Bissonnette", "Dube",
-    "Delisle", "Deveau", "Jolicoeur", "Begin", "Beaulieu", "Belanger", "Boudreau", "Boucher", "Belanger", "Breton",
-    "Brouillette", "Caron", "Castonguay", "Cavanagh", "Cloutier", "Collin", "Dupont", "Gagne", "Girard", "Gosselin",
-    "Grenier", "Hebert", "Gauthier", "Robitaille", "Roy", "Simard", "Boutin", "Tremblay", "Thibault", "Vachon",
-    "Brisson", "Gendron", "Brunet", "Gravel", "Vallee", "Girard", "Lafleur", "Laporte", "Marchand", "Gravel",
-    "Harvey", "Michaud", "Chabot", "Coutu", "Bourgault", "Allaire", "Levesque", "Gagne", "Gosselin", "Plante",
-    "Lemoine", "Chartrand", "Melis", "Fournier", "Langlois", "Belhumeur", "Nadeau"
+    "Cameron", "Wheeler", "Ziegler", "Smith", "Johnson", "Brown", "Taylor", "Wilson", "Anderson", "Clark",
+    "Robinson", "Walker", "Wright", "Mitchell", "Campbell", "Stewart", "Young", "Scott", "King", "Bennett",
+    "Reid", "Kelly", "Howard", "Gordon", "Spencer", "Palmer", "Brooks", "Bishop", "Chapman", "Sullivan",
+    "Webb", "Henderson", "Marshall", "Grant", "Hunter", "Cunningham", "Burns", "Cole", "Dixon", "Foster",
+    "Graham", "Harper", "Hayes", "Lane", "Matthews", "Murray", "Porter", "Reynolds", "Russell", "Shaw",
+    "Wallace", "Warren", "West", "Woods", "Armstrong", "Barker", "Barrett", "Bates", "Blair", "Boone",
+    "Bradley", "Bryant", "Burton", "Byrne", "Carson", "Chambers", "Clayton", "Coleman", "Collins", "Conway",
+    "Cook", "Cooper", "Craig", "Crawford", "Dalton", "Douglas", "Duncan", "Ellis", "Fleming", "Ford",
+    "Francis", "Fraser", "Garrett", "George", "Gilbert", "Grant", "Griffin", "Hall", "Hamilton", "Hardy",
+    "Harris", "Hart", "Hastings", "Hawkins", "Higgins", "Hodges", "Holland", "Hopkins", "Ingram", "Jennings",
+    "Johnston", "Keller", "Kennedy", "Kerr", "Knight", "Lamb", "Lawrence", "Lawson", "Little", "Long",
+    "Love", "Lowe", "Lucas", "Lynch", "MacDonald", "MacGregor", "Manning", "Martin", "Mason", "Maxwell",
+    "McBride", "McCarthy", "McConnell", "McCoy", "McDonald", "McIntosh", "McKay", "McKenzie", "McLean", "Miles",
+    "Miller", "Moore", "Morgan", "Morris", "Morrison", "Nash", "Newton", "Nixon", "Norris", "O'Connor",
+    "O'Donnell", "Page", "Parker", "Parsons", "Payne", "Pearson", "Perry", "Peters", "Powell", "Preston",
+    "Price", "Quinn", "Ramsey", "Randall", "Rasmussen", "Ray", "Reeves", "Riley", "Roberts", "Robinson",
+    "Rogers", "Rowe", "Sanders", "Savage", "Schmidt", "Sharp", "Shelton", "Sherman", "Shields", "Short",
+    "Simon", "Skinner", "Slater", "Sloan", "Small", "Snow", "Snyder", "Stanton", "Steele", "Stephens",
+    "Stevens", "Stone", "Stuart", "Summers", "Sutton", "Swanson", "Sweeney", "Tanner", "Tate", "Taylor",
+    "Thomas", "Thornton", "Todd", "Townsend", "Travis", "Tucker", "Turner", "Underwood", "Vance", "Vaughn",
+    "Wade", "Walker", "Wall", "Walsh", "Walter", "Walton", "Ward", "Warner", "Waters", "Watkins",
+    "Weaver", "Webster", "Weeks", "Welch", "Wells", "Weston", "White", "Whitney", "Wilder", "Wilkins",
+    "Willis", "Wilson", "Winters", "Wise", "Wood", "Woodard", "Woods", "Wright", "York", "Young",
+    "Abbott", "Adams", "Aldridge", "Allison", "Arnold", "Atkinson", "Austin", "Ball", "Benson", "Black",
+    "Boyd", "Brady", "Briggs", "Bruce", "Carlson", "Casey", "Chandler", "Church", "Conner", "Crosby", "Avery",
+    "Bain", "Barlow", "Barr", "Beck", "Bell", "Bentley", "Best", "Betts", "Blackburn",
+    "Blake", "Blanchard", "Bond", "Bonner", "Booker", "Booth", "Boswell", "Bowman", "Boyle", "Bradshaw",
+    "Brennan", "Brock", "Broughton", "Bryson", "Buckley", "Bullock", "Burgess", "Burke", "Burnett", "Burt",
+    "Byers", "Cain", "Callahan", "Carey", "Carlisle", "Carmichael", "Carr", "Carroll", "Cartwright", "Cavanaugh",
+    "Chandler", "Chase", "Christie", "Clarke", "Cleary", "Clemens", "Clifford", "Coates", "Compton", "Connelly",
+    "Connolly", "Cooke", "Corbett", "Coulter", "Courtney", "Cowan", "Crane", "Crocker", "Crowe", "Daley",
+    "Darby", "Darcy", "Davey", "Davies", "Decker", "Delaney", "Dennison", "Devlin", "Dillon", "Doherty",
+    "Donahue", "Donnelly", "Downing", "Drake", "Duffy", "Duncan", "Eaton", "Edge", "Elliott", "Emerson",
+    "Fairfax", "Farley", "Ferguson", "Field", "Finch", "Findlay", "Fitch", "Fleming", "Foley", "Forbes",
+    "Foster", "Fowler", "Fox", "Franklin", "Franks", "Frost", "Gale", "Garner", "Gates", "Gibbs"
 }},
 {CountryGenerator.Country.UnitedStates, new List<string> {
     "Adams", "Allen", "Anderson", "Baker", "Barnes", "Bell", "Bennett", "Black", "Blake", "Brooks",
@@ -460,68 +475,96 @@ namespace EHMAssistant
         }
         #endregion
 
-
         #region Static Constructor for Initialization
         static NameGenerator()
         {
-            random = RandomNumberGenerator.Create();
+            _secureRandom = new SecureRandomGenerator();
             firstNamesByCountry = new Dictionary<CountryGenerator.Country, List<string>>();
             lastNamesByCountry = new Dictionary<CountryGenerator.Country, List<string>>();
-
             InitializeNameLists();
-
-            // Initialize the HashSets
             usedFirstNames = new HashSet<string>();
             usedLastNames = new HashSet<string>();
-
             recentlyUsedNames = new Dictionary<CountryGenerator.Country, List<string>>();
             foreach (CountryGenerator.Country country in Enum.GetValues(typeof(CountryGenerator.Country)))
             {
                 recentlyUsedNames[country] = new List<string>();
             }
+
+            // Initialize French Canadian name lists
+            frenchCanadianFirstNames = new List<string> {
+            "Alexandre", "Antoine", "Benoit", "Charles", "Christian", "Claude", "Denis", "Dominique", "Émile", "Éric",
+            "François", "Gabriel", "Guillaume", "Hugo", "Jacques", "Jean", "Jean-François", "Jean-Luc", "Jean-Marc",
+            "Jean-Michel", "Jean-Philippe", "Jérôme", "Joël", "Laurent", "Louis", "Luc", "Marc", "Marc-André",
+            "Mathieu", "Michel", "Nicolas", "Olivier", "Pascal", "Patrick", "Philippe", "Pierre", "Rémi", "René",
+            "Sébastien", "Serge", "Simon", "Stéphane", "Sylvain", "Thierry", "Thomas", "Vincent", "Xavier", "Yves",
+            "André", "Alain", "Bernard", "Cédric", "David", "Éric", "Fabien", "Félix", "Gaston", "Gilbert",
+            "Guy", "Henri", "Julien", "Léo", "Loïc", "Marcel", "Martin", "Maxime", "Normand", "Patrice",
+            "Paul", "Pierre-Luc", "Raymond", "Richard", "Robert", "Roger", "Victor", "Yannick", "Rax", "Zacharie"
+        };
+
+            frenchCanadianLastNames = new List<string> {
+            "Abadie", "Benoit", "Bergeron", "Bernier", "Bouchard", "Bourassa", "Brouillette", "Brunet", "Chabot",
+            "Charbonneau", "Chartier", "Charest", "Cloutier", "Cote", "D'Amours", "Desjardins", "Dube", "Dumont", "Dupuis",
+            "Gagne", "Gauthier", "Gendron", "Gibeault", "Girard", "Godin", "Gosselin", "Grenier", "Guerin", "Laflamme",
+            "Lafleur", "Lamarche", "Lavoie", "Leclerc", "Lefebvre", "Lemieux", "Lepine", "Levesque", "Lavigne", "Leduc",
+            "Menard", "Michaud", "Morin", "Nadeau", "Nault", "Ouellet", "Perron", "Plante", "Poisson", "Proulx",
+            "Racine", "Rivard", "Robitaille", "Roy", "Simard", "Tanguay", "Thibeault", "Tremblay", "Vachon", "Vallieres",
+            "Vezina", "Allard", "Angers", "Archambault", "Arsenault", "Belanger", "Boucher", "Bourque", "Caron", "Charest",
+            "Chauvin", "Dufresne", "Ducharme", "Dufour", "Durand", "Duval", "Ethier", "Fournier", "Gaudreault", "Garneau",
+            "Gravel", "Gagnon", "Guerin", "Dion", "Desrochers", "Lambert", "Lauzon", "Picard", "Poirier", "Remillard",
+            "Rousseau", "Veronique", "Villeneuve", "Valois", "Vallee", "Trudeau", "Doucet", "Bissonnette", "Delisle", "Deveau",
+            "Jolicoeur", "Begin", "Beaulieu", "Boudreau", "Belanger", "Breton", "Castonguay", "Cavanagh", "Collin", "Dupont",
+            "Hebert", "Brisson", "Brunet", "Laporte", "Marchand", "Harvey", "Coutu", "Bourgault", "Allaire", "Chartrand",
+            "Belhumeur", "Langlois"
+        };
         }
         #endregion
 
         #region Generate name
         private static int GetRandomIndex(int max)
         {
-            byte[] randomNumber = new byte[4];
-            random.GetBytes(randomNumber);
-            int result = BitConverter.ToInt32(randomNumber, 0);
-            return Math.Abs(result % max);
+            // Use SecureRandomGenerator instead of direct RNG
+            return _secureRandom.GetRandomValue(0, max);
         }
 
         private static string GetUnusedName(List<string> nameList, HashSet<string> usedNames)
         {
-            // Get available names (ones that haven't been used yet)
             var availableNames = nameList.Where(name => !usedNames.Contains(name)).ToList();
-
             if (availableNames.Count == 0)
             {
                 throw new InvalidOperationException("No more unique names available");
             }
-
-            // Select a random name from available names
             string selectedName = availableNames[GetRandomIndex(availableNames.Count)];
-
-            // Add to used names set and remove from original list
             usedNames.Add(selectedName);
-            nameList.Remove(selectedName);
-
             return selectedName;
         }
 
-        public string GenerateRandomName(CountryGenerator.Country country)
+        public string GenerateRandomName(CountryGenerator.Country country, bool isFrenchCanadian = false)
         {
-            if (!firstNamesByCountry.ContainsKey(country) || !lastNamesByCountry.ContainsKey(country))
+            if (country == CountryGenerator.Country.Canada && isFrenchCanadian)
             {
-                throw new ArgumentException("Country not supported");
+                // Generate French Canadian name
+                string firstName = GetUnusedName(frenchCanadianFirstNames, usedFirstNames);
+                string lastName = GetUnusedName(frenchCanadianLastNames, usedLastNames);
+                return $"{firstName} {lastName}";
             }
+            else
+            {
+                // Generate regular name based on country
+                if (!firstNamesByCountry.ContainsKey(country) || !lastNamesByCountry.ContainsKey(country))
+                {
+                    throw new ArgumentException("Country not supported");
+                }
+                string firstName = GetUnusedName(firstNamesByCountry[country], usedFirstNames);
+                string lastName = GetUnusedName(lastNamesByCountry[country], usedLastNames);
+                return $"{firstName} {lastName}";
+            }
+        }
 
-            string firstName = GetUnusedName(firstNamesByCountry[country], usedFirstNames);
-            string lastName = GetUnusedName(lastNamesByCountry[country], usedLastNames);
-
-            return $"{firstName} {lastName}";
+        // Clean up method to be called when application closes
+        public static void Cleanup()
+        {
+            _secureRandom?.Dispose();
         }
         #endregion
     }

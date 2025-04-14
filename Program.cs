@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EHMAssistant.ModifyRoster;
 
 namespace EHMAssistant
 {
@@ -16,7 +17,12 @@ namespace EHMAssistant
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GenerateDraft());
+            Application.Run(new MainMenu());
         }
+
+        // Static properties to store the player data
+        public static Dictionary<int, string> PlayerDictionary { get; set; }
+        public static Dictionary<string, Team> PlayerTeamDictionary { get; set; }
+        public static List<Player> Players { get; set; }
     }
 }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace EHMAssistant
 {
-    class PlayerTargetAttributes
+    class PlayerTargetAttributes : IDisposable
     {
-        private readonly Random _random = new Random();
+        private readonly SecureRandomGenerator _secureRandom = new SecureRandomGenerator();
+        private bool _disposed;
 
         public struct AttributeTargets
         {
@@ -31,41 +32,47 @@ namespace EHMAssistant
             _targetAttributes = InitializeTargetAttributes();
         }
 
-        public (int targetOff, int targetDef) GetTargets(PlayerTypeGenerator.PlayerType playerType, 
+        public (int targetOff, int targetDef) GetTargets(PlayerTypeGenerator.PlayerType playerType,
             PositionStrengthGenerator.PositionStrength strength)
         {
             var key = (playerType, strength);
             if (_targetAttributes.TryGetValue(key, out AttributeTargets targets))
             {
                 // Roll for offensive boost (0 to DistributionValue)
-                int offenseBoost = _random.Next(0, targets.DistributionValue + 1);
+                int offenseBoost = _secureRandom.GetRandomValue(0, targets.DistributionValue + 1);
 
                 // Calculate defensive boost (remaining points)
                 int defenseBoost = targets.DistributionValue - offenseBoost;
 
-                // Return final values with boosts applied
+                // DEBUG LOGGING
+                Console.WriteLine($"[DEBUG] PlayerType: {playerType}, Strength: {strength}");
+                Console.WriteLine($"[DEBUG] Base Offense: {targets.TargetOffense}, Base Defense: {targets.TargetDefense}, DistributionValue: {targets.DistributionValue}");
+                Console.WriteLine($"[DEBUG] Rolled Offense Boost: {offenseBoost}, Calculated Defense Boost: {defenseBoost}");
+                Console.WriteLine($"[DEBUG] Final Offense: {targets.TargetOffense + offenseBoost}, Final Defense: {targets.TargetDefense + defenseBoost}");
+
                 return (targets.TargetOffense + offenseBoost,
                        targets.TargetDefense + defenseBoost);
             }
             return (0, 0);
         }
-        
+
+
         private Dictionary<(PlayerTypeGenerator.PlayerType, PositionStrengthGenerator.PositionStrength), AttributeTargets> InitializeTargetAttributes()
         {
             var targets = new Dictionary<(PlayerTypeGenerator.PlayerType, PositionStrengthGenerator.PositionStrength), AttributeTargets>();
 
             #region Attaquants
-            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.Generational), 
+            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.Generational),
                 new AttributeTargets(94, 79, 5));
-            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.Elite), 
+            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(89, 76, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.FirstLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.FirstLine),
                 new AttributeTargets(85, 75, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.SecondLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.SecondLine),
                 new AttributeTargets(81, 70, 7));
             targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.ThirdLine),
                 new AttributeTargets(79, 68, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.FourthLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.FourthLine),
                 new AttributeTargets(75, 65, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.Sniper, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
@@ -100,32 +107,32 @@ namespace EHMAssistant
             targets.Add((PlayerTypeGenerator.PlayerType.AttaquantOffensif, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
 
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.Generational), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.Generational),
                 new AttributeTargets(85, 82, 11));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.Elite), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(83, 80, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.FirstLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.FirstLine),
                 new AttributeTargets(80, 78, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.SecondLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.SecondLine),
                 new AttributeTargets(77, 76, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.ThirdLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.ThirdLine),
                 new AttributeTargets(70, 77, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.FourthLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.FourthLine),
                 new AttributeTargets(60, 75, 8));
             targets.Add((PlayerTypeGenerator.PlayerType.AttaquantDePuissance, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
 
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.Generational), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.Generational),
                 new AttributeTargets(85, 82, 11));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.Elite), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(83, 81, 5));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.FirstLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.FirstLine),
                 new AttributeTargets(81, 79, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.SecondLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.SecondLine),
                 new AttributeTargets(79, 77, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.ThirdLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.ThirdLine),
                 new AttributeTargets(70, 77, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.FourthLine), 
+            targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.FourthLine),
                 new AttributeTargets(60, 75, 9));
             targets.Add((PlayerTypeGenerator.PlayerType.AttaquantPolyvalent, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
@@ -142,33 +149,33 @@ namespace EHMAssistant
                 new AttributeTargets(66, 77, 7));
             targets.Add((PlayerTypeGenerator.PlayerType.JoueurDeCaractere, PositionStrengthGenerator.PositionStrength.FourthLine),
                 new AttributeTargets(58, 75, 8));
-            targets.Add((PlayerTypeGenerator.PlayerType.JoueurDeCaractere, PositionStrengthGenerator.PositionStrength.AHL), 
+            targets.Add((PlayerTypeGenerator.PlayerType.JoueurDeCaractere, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
             #endregion
-            
+
             #region Defenseurs
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Generational), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Generational),
                 new AttributeTargets(91, 80, 5));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Elite), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(87, 78, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.FirstPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.FirstPair),
                 new AttributeTargets(86, 76, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.SecondPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.SecondPair),
                 new AttributeTargets(83, 74, 4));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.ThirdPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.ThirdPair),
                 new AttributeTargets(80, 69, 5));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurOffensif, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
 
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Generational), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Generational),
                 new AttributeTargets(82, 86, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Elite), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.Elite),
                 new AttributeTargets(78, 84, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.FirstPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.FirstPair),
                 new AttributeTargets(75, 81, 6));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.SecondPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.SecondPair),
                 new AttributeTargets(68, 81, 5));
-            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.ThirdPair), 
+            targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.ThirdPair),
                 new AttributeTargets(60, 78, 6));
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurDefensif, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
@@ -186,8 +193,17 @@ namespace EHMAssistant
             targets.Add((PlayerTypeGenerator.PlayerType.DefenseurPhysique, PositionStrengthGenerator.PositionStrength.AHL),
                 new AttributeTargets(69, 69, 4));
             #endregion
-            
+
             return targets;
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _secureRandom.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

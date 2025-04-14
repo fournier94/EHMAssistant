@@ -95,6 +95,8 @@ namespace EHMAssistant
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainMenu";
             this.Text = "EHM Assistant";
+            this.Load += new System.EventHandler(this.MainMenu_Load);
+            this.Resize += new System.EventHandler(this.MainMenu_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 

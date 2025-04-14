@@ -7,7 +7,8 @@ namespace EHMAssistant
 {
     class PlayerTypeGenerator
     {
-        private readonly RNGCryptoServiceProvider _rng;
+        #region Variables
+        private readonly SecureRandomGenerator _randomGenerator;
         private readonly Dictionary<PlayerType, int> _assignedTypes;
         private int _totalAssigned;
         private readonly int _totalPlayers;
@@ -22,7 +23,9 @@ namespace EHMAssistant
         // Target percentages for ranks 34-60
         private readonly Dictionary<(PositionGenerator.Position, Round), Dictionary<PlayerType, int>> _typeTargets =
             new Dictionary<(PositionGenerator.Position, Round), Dictionary<PlayerType, int>>();
+        #endregion
 
+        #region PlayerType and Round Enums
         public enum PlayerType
         {
             // Forward types
@@ -45,8 +48,9 @@ namespace EHMAssistant
             FirstRound,  // Rank 1-30
             SecondRound  // Rank 31-60
         }
+        #endregion
 
-        // Lists of player types by position category
+        #region Player Types by category
         private readonly List<PlayerType> _forwardTypes = new List<PlayerType>
         {
             PlayerType.Sniper,
@@ -87,7 +91,9 @@ namespace EHMAssistant
             PlayerType.DefenseurDefensif,
             PlayerType.DefenseurPhysique
         };
+        #endregion
 
+        #region Initialize Player Type Odds
         private void InitializeTypeTargets()
         {
             // Low Rank (34-60) odds - These will be used for random distributions
@@ -103,10 +109,10 @@ namespace EHMAssistant
 
             _typeTargets.Add((PositionGenerator.Position.Center, Round.SecondRound), new Dictionary<PlayerType, int>
             {
-                { PlayerType.Sniper, 5 },
-                { PlayerType.FabricantDeJeu, 5 },
-                { PlayerType.AttaquantOffensif, 5 },
-                { PlayerType.AttaquantDePuissance, 45 },
+                { PlayerType.Sniper, 4 },
+                { PlayerType.FabricantDeJeu, 4 },
+                { PlayerType.AttaquantOffensif, 4 },
+                { PlayerType.AttaquantDePuissance, 48 },
                 { PlayerType.AttaquantPolyvalent, 18 },
                 { PlayerType.JoueurDeCaractere, 22 }
             });
@@ -123,10 +129,12 @@ namespace EHMAssistant
             _typeTargets.Add((PositionGenerator.Position.Goaltender, Round.FirstRound), goalieOdds);
             _typeTargets.Add((PositionGenerator.Position.Goaltender, Round.SecondRound), goalieOdds);
         }
+        #endregion
 
+        #region Constructor
         public PlayerTypeGenerator(int totalPlayers = 60)
         {
-            _rng = new RNGCryptoServiceProvider();
+            _randomGenerator = new SecureRandomGenerator();
             _totalPlayers = totalPlayers;
             _totalAssigned = 0;
             _assignedTypes = new Dictionary<PlayerType, int>();
@@ -136,7 +144,9 @@ namespace EHMAssistant
             }
             InitializeTypeTargets();
         }
+        #endregion
 
+        #region Roll Player Type
         public PlayerType RollPlayerType(PositionGenerator.Position position, int rank)
         {
             // Always return Gardien for goaltender
@@ -174,7 +184,9 @@ namespace EHMAssistant
             // This should never happen given our input constraints
             throw new ArgumentException($"Invalid rank: {rank}");
         }
-
+        #endregion
+        
+        #region Roll rank 1 to 33
         private PlayerType RollRank1to8Type(PositionGenerator.Position position)
         {
             // Initialize assigned types dictionary if it doesn't exist
@@ -227,8 +239,8 @@ namespace EHMAssistant
                 }
             }
 
-            // Roll for a type
-            PlayerType selectedType = availableTypes[GetSecureRandomInt(0, availableTypes.Count)];
+            // Roll for a type using SecureRandomGenerator
+            PlayerType selectedType = availableTypes[_randomGenerator.GetRandomValue(0, availableTypes.Count)];
 
             // Mark it as assigned
             _rank1to8Assigned[selectedType]++;
@@ -287,8 +299,8 @@ namespace EHMAssistant
                 }
             }
 
-            // Roll for a type
-            PlayerType selectedType = availableTypes[GetSecureRandomInt(0, availableTypes.Count)];
+            // Roll for a type using SecureRandomGenerator
+            PlayerType selectedType = availableTypes[_randomGenerator.GetRandomValue(0, availableTypes.Count)];
 
             // Mark it as assigned
             _rank9to16Assigned[selectedType]++;
@@ -347,8 +359,8 @@ namespace EHMAssistant
                 }
             }
 
-            // Roll for a type
-            PlayerType selectedType = availableTypes[GetSecureRandomInt(0, availableTypes.Count)];
+            // Roll for a type using SecureRandomGenerator
+            PlayerType selectedType = availableTypes[_randomGenerator.GetRandomValue(0, availableTypes.Count)];
 
             // Mark it as assigned
             _rank17to26Assigned[selectedType]++;
@@ -408,8 +420,8 @@ namespace EHMAssistant
                 }
             }
 
-            // Roll for a type
-            PlayerType selectedType = availableTypes[GetSecureRandomInt(0, availableTypes.Count)];
+            // Roll for a type using SecureRandomGenerator
+            PlayerType selectedType = availableTypes[_randomGenerator.GetRandomValue(0, availableTypes.Count)];
 
             // Mark it as assigned
             _rank27to33Assigned[selectedType]++;
@@ -418,7 +430,9 @@ namespace EHMAssistant
 
             return selectedType;
         }
+        #endregion
 
+        #region Roll ranks 34 to 60
         private PlayerType RollLowerRankType(PositionGenerator.Position position, Round round)
         {
             // For ranks 34-60, we use the predefined odds tables
@@ -440,7 +454,8 @@ namespace EHMAssistant
                 }
             }
 
-            PlayerType selectedType = weightedTypes[GetSecureRandomInt(0, weightedTypes.Count)];
+            // Use SecureRandomGenerator for random selection
+            PlayerType selectedType = weightedTypes[_randomGenerator.GetRandomValue(0, weightedTypes.Count)];
 
             // For ranks 34-60, we don't need to track uniqueness constraints
             // Just update global counters
@@ -449,29 +464,9 @@ namespace EHMAssistant
 
             return selectedType;
         }
+        #endregion
 
-        private int GetSecureRandomInt(int minValue, int maxValue)
-        {
-            if (minValue >= maxValue)
-                throw new ArgumentException("minValue must be less than maxValue");
-
-            byte[] randomBytes = new byte[4];
-            _rng.GetBytes(randomBytes);
-            int value = BitConverter.ToInt32(randomBytes, 0);
-
-            // Handle potential overflow with large ranges
-            int range = maxValue - minValue;
-            int max = int.MaxValue - (int.MaxValue % range);
-
-            while (value >= max)
-            {
-                _rng.GetBytes(randomBytes);
-                value = BitConverter.ToInt32(randomBytes, 0);
-            }
-
-            return minValue + (Math.Abs(value) % range);
-        }
-
+        #region Print Distribution
         public void PrintDistribution()
         {
             Console.WriteLine("\nCurrent Player Type Distribution:");
@@ -482,5 +477,13 @@ namespace EHMAssistant
                 Console.WriteLine($"{kvp.Key}: {kvp.Value} players ({percentage:F1}%)");
             }
         }
+        #endregion
+
+        #region IDisposable Implementation
+        public void Dispose()
+        {
+            _randomGenerator?.Dispose();
+        }
+        #endregion
     }
 }

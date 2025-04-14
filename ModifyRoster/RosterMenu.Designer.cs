@@ -35,7 +35,10 @@ namespace EHMAssistant.ModifyRoster
             this.tabTeamOverview = new System.Windows.Forms.TabPage();
             this.tabTeamsStrength = new System.Windows.Forms.TabPage();
             this.cboTeams = new System.Windows.Forms.ComboBox();
+            this.dgvTeamRoster = new System.Windows.Forms.DataGridView();
             this.tabCtrlRoster.SuspendLayout();
+            this.tabRoster.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTeamRoster)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCtrlRoster
@@ -52,6 +55,7 @@ namespace EHMAssistant.ModifyRoster
             // 
             // tabRoster
             // 
+            this.tabRoster.Controls.Add(this.dgvTeamRoster);
             this.tabRoster.Location = new System.Drawing.Point(4, 28);
             this.tabRoster.Name = "tabRoster";
             this.tabRoster.Padding = new System.Windows.Forms.Padding(3);
@@ -90,6 +94,14 @@ namespace EHMAssistant.ModifyRoster
             this.cboTeams.TabIndex = 1;
             this.cboTeams.SelectedIndexChanged += new System.EventHandler(this.cboTeams_SelectedIndexChanged);
             // 
+            // dgvTeamRoster
+            // 
+            this.dgvTeamRoster.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTeamRoster.Location = new System.Drawing.Point(6, 6);
+            this.dgvTeamRoster.Name = "dgvTeamRoster";
+            this.dgvTeamRoster.Size = new System.Drawing.Size(1540, 779);
+            this.dgvTeamRoster.TabIndex = 0;
+            // 
             // RosterMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -106,6 +118,8 @@ namespace EHMAssistant.ModifyRoster
             this.Text = "Modifier un roster";
             this.Load += new System.EventHandler(this.RosterMenu_Load);
             this.tabCtrlRoster.ResumeLayout(false);
+            this.tabRoster.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTeamRoster)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -117,5 +131,6 @@ namespace EHMAssistant.ModifyRoster
         private System.Windows.Forms.TabPage tabTeamsStrength;
         private System.Windows.Forms.ComboBox cboTeams;
         private System.Windows.Forms.TabPage tabTeamOverview;
+        private System.Windows.Forms.DataGridView dgvTeamRoster;
     }
 }

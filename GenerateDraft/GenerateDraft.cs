@@ -847,7 +847,7 @@ namespace EHMAssistant
             return 13;
         }
         #endregion
-
+        
         #region Tab stats finales
         private void InitializeFinalStatsGridView()
         {
@@ -1507,58 +1507,15 @@ namespace EHMAssistant
 
             StringBuilder sb = new StringBuilder();
 
-            // Start the HTML structure
-            sb.Append("<!DOCTYPE html>");
-            sb.Append("<html lang=\"fr\">");
-            sb.Append("<head>");
-            sb.Append("<meta charset=\"UTF-8\">");
-            sb.Append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-            sb.Append("<title>Draft</title>");
-            sb.Append("<style>");
-            sb.Append("table { border-collapse: collapse; width: 100%; }");
-            sb.Append("th, td { border: 1px solid black; padding: 8px; text-align: center; }");
-            sb.Append("th { background-color: #f2f2f2; }");
-            sb.Append("</style>");
-            sb.Append("</head>");
-            sb.Append("<body>");
-            sb.Append("<table>");
-
-            // Table header
-            sb.Append("<thead><tr>");
-            sb.Append("<th>#</th>");
-            sb.Append("<th>Nom</th>");
-            sb.Append("<th>Nation</th>");
-            sb.Append("<th>Position</th>");
-            sb.Append("<th>Taille</th>");
-            sb.Append("<th>Style</th>");
-            sb.Append("<th>Potentiel</th>");
-            sb.Append("</tr></thead>");
-
-            // Table body
-            sb.Append("<tbody>");
-
             // Sort players by rank
             var sortedPlayers = players.OrderBy(p => p.Rank).ToList();
 
             foreach (var player in sortedPlayers)
             {
-                // Generate the row for each player
-                sb.Append("<tr>");
-                sb.Append($"<td>{player.Rank}</td>");
-                sb.Append($"<td>{player.Name}</td>");
-                sb.Append($"<td>{GetCountryLogoString(player.PlayerCountry)}</td>");
-                sb.Append($"<td>{GetPositionConcatenatedString(player.PlayerPosition, player)}</td>");
-                sb.Append($"<td>{player.Height}</td>");
-                sb.Append($"<td>{GetPlayerTypeString(player.PlayerType)}</td>");
-                sb.Append($"<td>{_strengthGen.GetStrengthOddsTranslated(player.PlayerPosition, player.Rank, GetStrengthString)}</td>");
-                sb.Append("</tr>");
+                // Format each player entry according to the desired format
+                string countryCode = GetCountryLogoString(player.PlayerCountry);
+                sb.AppendLine($"{player.Rank}. {player.Name} {countryCode} {GetPositionConcatenatedString(player.PlayerPosition, player)} - {player.Height} - {GetPlayerTypeString(player.PlayerType)} ----- {_strengthGen.GetStrengthOddsTranslated(player.PlayerPosition, player.Rank, GetStrengthString)}");
             }
-
-            // Close the table and HTML structure
-            sb.Append("</tbody>");
-            sb.Append("</table>");
-            sb.Append("</body>");
-            sb.Append("</html>");
 
             // Update the RichTextBox or any other UI control
             if (draftListBox.InvokeRequired)
@@ -1570,6 +1527,7 @@ namespace EHMAssistant
                 draftListBox.Text = sb.ToString();
             }
         }
+
         #endregion
 
         #region Refresh views

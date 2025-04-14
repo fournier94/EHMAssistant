@@ -30,8 +30,10 @@ namespace EHMAssistant
 
         public int TargetOffense { get; set; }
         public int TargetDefense { get; set; }
+
+        public int TeamNumber { get; set; }
         #endregion
-        
+
         #region Final Attributes
         // Attributes
         public int Fighting { get; set; }
@@ -91,7 +93,7 @@ namespace EHMAssistant
             }
         }
         #endregion
-
+        
         #region Starting attributes
         public int StartingFighting { get; set; }
 
@@ -135,7 +137,7 @@ namespace EHMAssistant
             return ceiling;
         }
         #endregion
-        
+
         #region Player Constructor
         public Player(int rank, PositionGenerator posGen, CountryGenerator countryGen,
     PlayerTypeGenerator typeGen, PositionStrengthGenerator strengthGen,
@@ -146,17 +148,30 @@ namespace EHMAssistant
             PlayerCountry = countryGen.RollCountry();
             PlayerType = typeGen.RollPlayerType(PlayerPosition, Rank);
             PositionStrength = strengthGen.RollStrength(PlayerPosition, Rank);
-
             _nameGen = new NameGenerator();
-            Name = _nameGen.GenerateRandomName(PlayerCountry);
-            Height = heightGen.RollHeight(PlayerType);
 
-            // Generate birth date
+            // Handle Canadian player naming with language consideration
+            if (PlayerCountry == CountryGenerator.Country.Canada)
+            {
+                int frenchCanadianChance = _secureRandom.GetRandomValue(1, 101); // 1 to 100 inclusive
+                bool isFrenchCanadian = frenchCanadianChance <= 28; // 28% chance as per requirements
+                Name = _nameGen.GenerateRandomName(PlayerCountry, isFrenchCanadian);
+            }
+            else
+            {
+                // For non-Canadian players, use the standard name generation
+                Name = _nameGen.GenerateRandomName(PlayerCountry);
+            }
+
+            Height = heightGen.RollHeight(PlayerType);
             BirthDateGenerator birthDateGen = new BirthDateGenerator(draftForm);
             birthDateGen.GenerateBirthDate(this);
+            Handedness = _secureRandom.GetRandomValue(0, 2) == 0 ? "Right" : "Left";
+        }
 
-            // Securely generate handedness (0 = Left, 1 = Right)
-            Handedness = _secureRandom.GetRandomValue(0, 1) == 0 ? "Right" : "Left";
+        public Player()
+        {
+            
         }
         #endregion
     }

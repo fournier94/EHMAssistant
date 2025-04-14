@@ -8,7 +8,7 @@ namespace EHMAssistant
     class HeightGenerator
     {
         #region Variables
-        private readonly RNGCryptoServiceProvider _rng;
+        private readonly SecureRandomGenerator _secureRandom;
         private readonly Dictionary<string, int> _assignedHeights;
         private int _totalAssigned;
         private const int NUMBER_OF_ROLLS = 10;
@@ -194,7 +194,7 @@ namespace EHMAssistant
         #region Constructor
         public HeightGenerator()
         {
-            _rng = new RNGCryptoServiceProvider();
+            _secureRandom = new SecureRandomGenerator();
             _totalAssigned = 0;
             _assignedHeights = new Dictionary<string, int>();
 
@@ -232,7 +232,7 @@ namespace EHMAssistant
                 }
             }
 
-            return weightedHeights[GetSecureRandomInt(0, weightedHeights.Count)];
+            return weightedHeights[_secureRandom.GetRandomValue(0, weightedHeights.Count)];
         }
 
         public string RollHeight(PlayerTypeGenerator.PlayerType playerType)
@@ -250,26 +250,6 @@ namespace EHMAssistant
             _totalAssigned++;
 
             return lastRoll;
-        }
-
-        private int GetSecureRandomInt(int minValue, int maxValue)
-        {
-            if (minValue >= maxValue)
-                throw new ArgumentException("minValue must be less than maxValue");
-
-            byte[] randomBytes = new byte[4];
-            _rng.GetBytes(randomBytes);
-            int value = BitConverter.ToInt32(randomBytes, 0);
-
-            int range = maxValue - minValue;
-            int max = int.MaxValue - (int.MaxValue % range);
-            while (value >= max)
-            {
-                _rng.GetBytes(randomBytes);
-                value = BitConverter.ToInt32(randomBytes, 0);
-            }
-
-            return minValue + (Math.Abs(value) % range);
         }
         #endregion
 

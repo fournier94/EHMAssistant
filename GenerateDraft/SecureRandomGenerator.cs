@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 namespace EHMAssistant
@@ -19,21 +15,22 @@ namespace EHMAssistant
 
         public int GetRandomValue(int minValue, int maxValue)
         {
-            if (minValue >= maxValue)
-                return 1;
+            // Handle edge cases
+            if (minValue == maxValue)
+                return minValue; // Only one possible value
 
-                // throw new ArgumentOutOfRangeException(nameof(maxValue), "maxValue must be greater than minValue");
+            if (minValue > maxValue)
+                throw new ArgumentOutOfRangeException(nameof(maxValue), "maxValue must be greater than or equal to minValue");
 
-            int range = maxValue - minValue;
-            if (range <= 0)
-                throw new ArgumentOutOfRangeException(nameof(range), "The range must be greater than 0");
+            // Calculate the range (maxValue is exclusive)
+            uint range = (uint)(maxValue - minValue);
 
             // Create a mask for generating numbers that won't introduce bias
             uint mask = uint.MaxValue;
-            if (range < int.MaxValue)
+            if (range < uint.MaxValue)
             {
                 // Create the smallest mask that can contain the range
-                mask = (uint)range;
+                mask = range;
                 mask |= mask >> 1;
                 mask |= mask >> 2;
                 mask |= mask >> 4;
@@ -49,7 +46,7 @@ namespace EHMAssistant
             {
                 _rng.GetBytes(randomBytes);
                 randomUint = BitConverter.ToUInt32(randomBytes, 0) & mask;
-            } while (randomUint > range);
+            } while (randomUint >= range); // Ensure the value is strictly less than range
 
             return minValue + (int)randomUint;
         }

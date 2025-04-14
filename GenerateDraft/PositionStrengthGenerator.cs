@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace EHMAssistant
 {
-    class PositionStrengthGenerator
+    class PositionStrengthGenerator : IDisposable
     {
-        private readonly RNGCryptoServiceProvider _rng;
+        #region Variables
+
+        private readonly SecureRandomGenerator _secureRandom;
         private readonly Dictionary<PositionGenerator.Position, Dictionary<int, RankOdds>> _positionStrengthOdds;
         private const int NUMBER_OF_ROLLS = 100;
         private readonly Queue<PositionStrength> _previousStrengths; // Track last 3 strengths
+        private bool _disposed = false; // Track whether the object has been disposed
+
         public delegate string StrengthTranslator(PositionStrength strength);
 
-        #region enum Positions strength
+        public class RankOdds
+        {
+            public Dictionary<PositionStrength, int> StrengthProbabilities { get; set; }
+        }
+
+        #endregion
+
+        #region Enum Positions Strength
         public enum PositionStrength
         {
             Generational, // Available to every position
@@ -31,20 +41,23 @@ namespace EHMAssistant
         }
         #endregion
 
-        public class RankOdds
-        {
-            public Dictionary<PositionStrength, int> StrengthProbabilities { get; set; }
-        }
+        #region Constructor
 
         public PositionStrengthGenerator()
         {
-            _rng = new RNGCryptoServiceProvider();
+            _secureRandom = new SecureRandomGenerator();
             _positionStrengthOdds = InitializeStrengthOdds();
             _previousStrengths = new Queue<PositionStrength>();  // Initialize queue
         }
 
+        #endregion
+
+        #region Get Strength Odds
         public string GetStrengthOdds(PositionGenerator.Position playerPosition, int playerRank)
         {
+            // Check if disposed
+            ThrowIfDisposed();
+
             // Initialize the odds dictionary
             var odds = InitializeStrengthOdds();
 
@@ -67,6 +80,9 @@ namespace EHMAssistant
 
         public string GetStrengthOddsTranslated(PositionGenerator.Position playerPosition, int playerRank, StrengthTranslator translator)
         {
+            // Check if disposed
+            ThrowIfDisposed();
+
             // Initialize the odds dictionary
             var odds = InitializeStrengthOdds();
 
@@ -86,7 +102,9 @@ namespace EHMAssistant
 
             return string.Empty;
         }
+        #endregion
 
+        #region Odds table
         private Dictionary<PositionGenerator.Position, Dictionary<int, RankOdds>> InitializeStrengthOdds()
         {
             var odds = new Dictionary<PositionGenerator.Position, Dictionary<int, RankOdds>>();
@@ -3138,9 +3156,14 @@ namespace EHMAssistant
 
             return odds;
         }
-        
+        #endregion
+
+        #region Roll Strength of player (Elite/1st line, etc...)
         private PositionStrength SingleRoll(PositionGenerator.Position position, int rank)
         {
+            // Check if disposed
+            ThrowIfDisposed();
+
             // Find the closest rank in odds table that's less than or equal to the player's rank
             var positionOdds = _positionStrengthOdds[position];
             int closestRank = positionOdds.Keys
@@ -3179,11 +3202,15 @@ namespace EHMAssistant
                 return SingleRoll(position, rank);
             }
 
-            return weightedStrengths[GetSecureRandomInt(0, weightedStrengths.Count)];
+            // Use SecureRandomGenerator instead of custom implementation
+            return weightedStrengths[_secureRandom.GetRandomValue(0, weightedStrengths.Count)];
         }
 
         internal PositionStrength RollStrength(PositionGenerator.Position position, int rank)
         {
+            // Check if disposed
+            ThrowIfDisposed();
+
             PositionStrength lastRoll = default;  // Default value for enum
             for (int i = 0; i < NUMBER_OF_ROLLS; i++)
             {
@@ -3199,25 +3226,46 @@ namespace EHMAssistant
 
             return lastRoll;
         }
+        #endregion
 
-        private int GetSecureRandomInt(int minValue, int maxValue)
+        #region IDisposable Implementation
+
+        public void Dispose()
         {
-            if (minValue >= maxValue)
-                throw new ArgumentException("minValue must be less than maxValue");
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-            byte[] randomBytes = new byte[4];
-            _rng.GetBytes(randomBytes);
-            int value = BitConverter.ToInt32(randomBytes, 0);
+        // Protected implementation of Dispose pattern
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
 
-            int range = maxValue - minValue;
-            int max = int.MaxValue - (int.MaxValue % range);
-            while (value >= max)
+            if (disposing)
             {
-                _rng.GetBytes(randomBytes);
-                value = BitConverter.ToInt32(randomBytes, 0);
+                // Free any managed objects here
+                _secureRandom?.Dispose();
             }
 
-            return minValue + (Math.Abs(value) % range);
+            _disposed = true;
         }
+
+        // Finalizer
+        ~PositionStrengthGenerator()
+        {
+            Dispose(false);
+        }
+
+        // Helper method to throw if this object has been disposed
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(PositionStrengthGenerator));
+            }
+        }
+
+        #endregion
     }
 }

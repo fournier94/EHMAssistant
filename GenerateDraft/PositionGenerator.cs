@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace EHMAssistant
 {
     class PositionGenerator
     {
         #region Variables
-        private readonly RNGCryptoServiceProvider _rng;
+        private readonly SecureRandomGenerator _secureRandom;
         private readonly Dictionary<Position, int> _assignedPositions;
         private int _totalAssigned;
         private readonly int _totalPlayers;
@@ -70,7 +69,7 @@ namespace EHMAssistant
         #region Constructor
         public PositionGenerator(int totalPlayers = 60)
         {
-            _rng = new RNGCryptoServiceProvider();
+            _secureRandom = new SecureRandomGenerator();
             _totalPlayers = totalPlayers;
             _totalAssigned = 0;
 
@@ -152,7 +151,7 @@ namespace EHMAssistant
                     }
 
                     // Select position
-                    lastRoll = availablePositions[GetSecureRandomInt(0, availablePositions.Count)];
+                    lastRoll = availablePositions[_secureRandom.GetRandomValue(0, availablePositions.Count)];
                 }
                 else
                 {
@@ -177,7 +176,7 @@ namespace EHMAssistant
                     // Choose from weighted list (ensure there's at least one option)
                     if (weightedPositions.Count > 0)
                     {
-                        lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                        lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                     }
                     // Fallback (shouldn't happen with correct math)
                     else
@@ -258,7 +257,7 @@ namespace EHMAssistant
                     // Choose from weighted list (ensure there's at least one option)
                     if (weightedPositions.Count > 0)
                     {
-                        lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                        lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                     }
                     // Fallback (shouldn't happen with correct math)
                     else
@@ -334,7 +333,7 @@ namespace EHMAssistant
                 // Choose from weighted list (ensure there's at least one option)
                 if (weightedPositions.Count > 0)
                 {
-                    lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                    lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                 }
                 // Fallback (shouldn't happen with correct math)
                 else
@@ -399,7 +398,7 @@ namespace EHMAssistant
                 // Choose from weighted list (ensure there's at least one option)
                 if (weightedPositions.Count > 0)
                 {
-                    lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                    lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                 }
                 // Fallback (shouldn't happen with correct math)
                 else
@@ -464,7 +463,7 @@ namespace EHMAssistant
                 // Choose from weighted list (ensure there's at least one option)
                 if (weightedPositions.Count > 0)
                 {
-                    lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                    lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                 }
                 // Fallback (shouldn't happen with correct math)
                 else
@@ -529,7 +528,7 @@ namespace EHMAssistant
                 // Choose from weighted list (ensure there's at least one option)
                 if (weightedPositions.Count > 0)
                 {
-                    lastRoll = weightedPositions[GetSecureRandomInt(0, weightedPositions.Count)];
+                    lastRoll = weightedPositions[_secureRandom.GetRandomValue(0, weightedPositions.Count)];
                 }
                 // Fallback (shouldn't happen with correct math)
                 else
@@ -557,24 +556,10 @@ namespace EHMAssistant
             return lastRoll;
         }
 
-        private int GetSecureRandomInt(int minValue, int maxValue)
+        // Dispose method to clean up SecureRandomGenerator
+        public void Dispose()
         {
-            if (minValue >= maxValue)
-                throw new ArgumentException("minValue must be less than maxValue");
-
-            byte[] randomBytes = new byte[4];
-            _rng.GetBytes(randomBytes);
-            int value = BitConverter.ToInt32(randomBytes, 0);
-
-            int range = maxValue - minValue;
-            int max = int.MaxValue - (int.MaxValue % range);
-            while (value >= max)
-            {
-                _rng.GetBytes(randomBytes);
-                value = BitConverter.ToInt32(randomBytes, 0);
-            }
-
-            return minValue + (Math.Abs(value) % range);
+            _secureRandom?.Dispose();
         }
         #endregion
     }
