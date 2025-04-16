@@ -32,10 +32,10 @@ namespace EHMAssistant.ModifyRoster
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RosterMenu));
             this.tabCtrlRoster = new System.Windows.Forms.TabControl();
             this.tabRoster = new System.Windows.Forms.TabPage();
+            this.dgvTeamRoster = new System.Windows.Forms.DataGridView();
             this.tabTeamOverview = new System.Windows.Forms.TabPage();
             this.tabTeamsStrength = new System.Windows.Forms.TabPage();
             this.cboTeams = new System.Windows.Forms.ComboBox();
-            this.dgvTeamRoster = new System.Windows.Forms.DataGridView();
             this.tabCtrlRoster.SuspendLayout();
             this.tabRoster.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTeamRoster)).BeginInit();
@@ -63,6 +63,14 @@ namespace EHMAssistant.ModifyRoster
             this.tabRoster.TabIndex = 0;
             this.tabRoster.Text = "Roster d\'équipe";
             this.tabRoster.UseVisualStyleBackColor = true;
+            // 
+            // dgvTeamRoster
+            // 
+            this.dgvTeamRoster.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTeamRoster.Location = new System.Drawing.Point(6, 6);
+            this.dgvTeamRoster.Name = "dgvTeamRoster";
+            this.dgvTeamRoster.Size = new System.Drawing.Size(1540, 779);
+            this.dgvTeamRoster.TabIndex = 0;
             // 
             // tabTeamOverview
             // 
@@ -93,14 +101,6 @@ namespace EHMAssistant.ModifyRoster
             this.cboTeams.Size = new System.Drawing.Size(273, 32);
             this.cboTeams.TabIndex = 1;
             this.cboTeams.SelectedIndexChanged += new System.EventHandler(this.cboTeams_SelectedIndexChanged);
-            // 
-            // dgvTeamRoster
-            // 
-            this.dgvTeamRoster.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTeamRoster.Location = new System.Drawing.Point(6, 6);
-            this.dgvTeamRoster.Name = "dgvTeamRoster";
-            this.dgvTeamRoster.Size = new System.Drawing.Size(1540, 779);
-            this.dgvTeamRoster.TabIndex = 0;
             // 
             // RosterMenu
             // 

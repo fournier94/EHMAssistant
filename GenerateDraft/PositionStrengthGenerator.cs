@@ -8,10 +8,8 @@ namespace EHMAssistant
     {
         #region Variables
 
-        private readonly SecureRandomGenerator _secureRandom;
+        private static readonly SecureRandomGenerator _secureRandom = new SecureRandomGenerator();
         private readonly Dictionary<PositionGenerator.Position, Dictionary<int, RankOdds>> _positionStrengthOdds;
-        private const int NUMBER_OF_ROLLS = 100;
-        private readonly Queue<PositionStrength> _previousStrengths; // Track last 3 strengths
         private bool _disposed = false; // Track whether the object has been disposed
 
         public delegate string StrengthTranslator(PositionStrength strength);
@@ -40,14 +38,12 @@ namespace EHMAssistant
             Backup // Available to goaltender
         }
         #endregion
-
+        
         #region Constructor
 
         public PositionStrengthGenerator()
         {
-            _secureRandom = new SecureRandomGenerator();
             _positionStrengthOdds = InitializeStrengthOdds();
-            _previousStrengths = new Queue<PositionStrength>();  // Initialize queue
         }
 
         #endregion
@@ -400,8 +396,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 55 },
-                            { PositionStrength.FourthLine, 20 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 25 }
                         }
                     }
                 },
@@ -414,8 +409,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 55 },
-                            { PositionStrength.FourthLine, 20 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 25 }
                         }
                     }
                 },
@@ -428,8 +422,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 50 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 30 }
                         }
                     }
                 },
@@ -442,8 +435,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 45 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 35 }
                         }
                     }
                 },
@@ -456,8 +448,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 45 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.FourthLine, 35 }
                         }
                     }
                 },
@@ -470,8 +461,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.FourthLine, 40 }
                         }
                     }
                 },
@@ -484,8 +474,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -498,8 +488,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -512,8 +502,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -526,8 +516,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -540,8 +530,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -554,8 +544,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -568,8 +558,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -582,8 +572,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -596,8 +586,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 30 },
-                            { PositionStrength.FourthLine, 33 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.FourthLine, 38 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -610,8 +600,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 8 },
                             { PositionStrength.ThirdLine, 30 },
-                            { PositionStrength.FourthLine, 33 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.FourthLine, 38 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -624,8 +614,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -638,8 +628,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -652,8 +642,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -666,8 +656,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -680,8 +670,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -694,8 +684,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -708,8 +698,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -722,8 +712,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -736,8 +726,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -750,8 +740,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -764,8 +754,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -778,8 +768,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 50 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 55 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -792,8 +782,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 50 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 55 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -806,8 +796,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -820,8 +810,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -834,8 +824,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -848,8 +838,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -862,8 +852,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -876,8 +866,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -890,8 +880,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 }
@@ -1056,7 +1046,7 @@ namespace EHMAssistant
                     }
                 },
                 {
-                                        15, new RankOdds
+                    15, new RankOdds
                     {
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
@@ -1190,8 +1180,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 55 },
-                            { PositionStrength.FourthLine, 20 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 25 }
                         }
                     }
                 },
@@ -1204,8 +1193,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 55 },
-                            { PositionStrength.FourthLine, 20 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 25 }
                         }
                     }
                 },
@@ -1218,8 +1206,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 50 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 30 }
                         }
                     }
                 },
@@ -1232,8 +1219,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 45 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.FourthLine, 35 }
                         }
                     }
                 },
@@ -1246,8 +1232,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 45 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.FourthLine, 35 }
                         }
                     }
                 },
@@ -1260,8 +1245,7 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 5 },
                             { PositionStrength.SecondLine, 13 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.FourthLine, 40 }
                         }
                     }
                 },
@@ -1274,8 +1258,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -1288,8 +1272,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -1302,8 +1286,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -1316,8 +1300,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -1330,8 +1314,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 4 },
                             { PositionStrength.SecondLine, 15 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -1344,8 +1328,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -1358,8 +1342,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 40 },
-                            { PositionStrength.FourthLine, 25 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 30 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -1372,8 +1356,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 35 },
-                            { PositionStrength.FourthLine, 30 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FourthLine, 35 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -1386,8 +1370,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 11 },
                             { PositionStrength.ThirdLine, 30 },
-                            { PositionStrength.FourthLine, 33 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.FourthLine, 38 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -1400,8 +1384,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 8 },
                             { PositionStrength.ThirdLine, 30 },
-                            { PositionStrength.FourthLine, 33 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.FourthLine, 38 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -1414,8 +1398,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1428,8 +1412,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1442,8 +1426,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 25 },
-                            { PositionStrength.FourthLine, 35 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 40 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1456,8 +1440,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1470,8 +1454,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1484,8 +1468,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 20 },
-                            { PositionStrength.FourthLine, 40 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 45 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1498,8 +1482,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1512,8 +1496,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1526,8 +1510,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1540,8 +1524,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1554,8 +1538,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 15 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1568,8 +1552,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 50 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 55 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1582,8 +1566,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 50 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.FourthLine, 55 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -1596,8 +1580,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1610,8 +1594,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1624,8 +1608,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1638,8 +1622,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1652,8 +1636,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1666,8 +1650,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -1680,8 +1664,8 @@ namespace EHMAssistant
                             { PositionStrength.FirstLine, 3 },
                             { PositionStrength.SecondLine, 6 },
                             { PositionStrength.ThirdLine, 10 },
-                            { PositionStrength.FourthLine, 45 },
-                            { PositionStrength.AHL, 35 }
+                            { PositionStrength.FourthLine, 50 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 }
@@ -1689,7 +1673,7 @@ namespace EHMAssistant
 
             odds[PositionGenerator.Position.Center] = centerOdds;
             #endregion
-
+            
             #region Defenseurs
             var defenseurOdds = new Dictionary<int, RankOdds>
             {
@@ -1913,8 +1897,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 10 },
                             { PositionStrength.SecondPair, 25 },
-                            { PositionStrength.ThirdPair, 58 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.ThirdPair, 63 }
                         }
                     }
                 },
@@ -1926,8 +1909,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 10 },
                             { PositionStrength.SecondPair, 18 },
-                            { PositionStrength.ThirdPair, 65 },
-                            { PositionStrength.AHL, 5 }
+                            { PositionStrength.ThirdPair, 70 }
                         }
                     }
                 },
@@ -1937,10 +1919,9 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 2 },
-                            { PositionStrength.FirstPair, 8 },
-                            { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 65 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.FirstPair, 10 },
+                            { PositionStrength.SecondPair, 18 },
+                            { PositionStrength.ThirdPair, 70 }
                         }
                     }
                 },
@@ -1952,8 +1933,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 8 },
                             { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 65 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -1965,8 +1945,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 8 },
                             { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 65 },
-                            { PositionStrength.AHL, 10 }
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -1978,8 +1957,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 8 },
                             { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -1991,8 +1969,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 8 },
                             { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -2004,8 +1981,7 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 2 },
                             { PositionStrength.FirstPair, 8 },
                             { PositionStrength.SecondPair, 15 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 15 }
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -2015,10 +1991,9 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 2 },
-                            { PositionStrength.FirstPair, 7 },
-                            { PositionStrength.SecondPair, 16 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FirstPair, 8 },
+                            { PositionStrength.SecondPair, 15 },
+                            { PositionStrength.ThirdPair, 75 }
                         }
                     }
                 },
@@ -2028,10 +2003,10 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 2 },
-                            { PositionStrength.FirstPair, 7 },
-                            { PositionStrength.SecondPair, 16 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.FirstPair, 8 },
+                            { PositionStrength.SecondPair, 15 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -2041,10 +2016,10 @@ namespace EHMAssistant
                         StrengthProbabilities = new Dictionary<PositionStrength, int>
                         {
                             { PositionStrength.Elite, 2 },
-                            { PositionStrength.FirstPair, 7 },
-                            { PositionStrength.SecondPair, 16 },
-                            { PositionStrength.ThirdPair, 50 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.FirstPair, 8 },
+                            { PositionStrength.SecondPair, 15 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 10 }
                         }
                     }
                 },
@@ -2056,8 +2031,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -2069,8 +2044,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -2082,8 +2057,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 20 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 15 }
                         }
                     }
                 },
@@ -2095,8 +2070,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2108,8 +2083,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 14 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2121,8 +2096,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 9 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2134,8 +2109,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 9 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2147,8 +2122,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 9 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2160,8 +2135,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 5 },
                             { PositionStrength.SecondPair, 9 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 25 }
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 20 }
                         }
                     }
                 },
@@ -2173,8 +2148,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2186,8 +2161,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2199,8 +2174,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2212,8 +2187,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2225,8 +2200,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2238,8 +2213,8 @@ namespace EHMAssistant
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 3 },
                             { PositionStrength.SecondPair, 11 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2250,9 +2225,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 62 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2263,9 +2238,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 62 },
-                            { PositionStrength.AHL, 30 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2276,9 +2251,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2289,9 +2264,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2302,9 +2277,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2315,9 +2290,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2328,9 +2303,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2341,9 +2316,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 60 },
-                            { PositionStrength.AHL, 31 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 65 },
+                            { PositionStrength.AHL, 25 }
                         }
                     }
                 },
@@ -2354,9 +2329,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2367,9 +2342,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2380,9 +2355,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2393,9 +2368,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2406,9 +2381,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2419,9 +2394,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 },
@@ -2432,9 +2407,9 @@ namespace EHMAssistant
                         {
                             { PositionStrength.Elite, 1 },
                             { PositionStrength.FirstPair, 2 },
-                            { PositionStrength.SecondPair, 6 },
-                            { PositionStrength.ThirdPair, 55 },
-                            { PositionStrength.AHL, 36 }
+                            { PositionStrength.SecondPair, 7 },
+                            { PositionStrength.ThirdPair, 60 },
+                            { PositionStrength.AHL, 30 }
                         }
                     }
                 }
@@ -3159,7 +3134,7 @@ namespace EHMAssistant
         #endregion
 
         #region Roll Strength of player (Elite/1st line, etc...)
-        private PositionStrength SingleRoll(PositionGenerator.Position position, int rank)
+        internal PositionStrength RollStrength(PositionGenerator.Position position, int rank)
         {
             // Check if disposed
             ThrowIfDisposed();
@@ -3176,55 +3151,19 @@ namespace EHMAssistant
             }
             var strengthOdds = positionOdds[closestRank].StrengthProbabilities;
 
-            // Create weighted list based on probabilities, excluding strength that would make four in a row
+            // Create weighted list based on probabilities
             List<PositionStrength> weightedStrengths = new List<PositionStrength>();
             foreach (var kvp in strengthOdds)
             {
-                // Check if this strength would create four in a row
-                bool wouldCreateFourInARow = _previousStrengths.Count == 3 &&
-                    _previousStrengths.All(s => s == kvp.Key);
-
-                // Only add strength if it wouldn't create four in a row
-                if (!wouldCreateFourInARow)
+                for (int i = 0; i < kvp.Value; i++)
                 {
-                    for (int i = 0; i < kvp.Value; i++)
-                    {
-                        weightedStrengths.Add(kvp.Key);
-                    }
+                    weightedStrengths.Add(kvp.Key);
                 }
             }
 
-            // If no strengths are available (all would create four in a row),
-            // reset the previous strengths and try again
-            if (!weightedStrengths.Any())
-            {
-                _previousStrengths.Clear();
-                return SingleRoll(position, rank);
-            }
-
-            // Use SecureRandomGenerator instead of custom implementation
-            return weightedStrengths[_secureRandom.GetRandomValue(0, weightedStrengths.Count)];
-        }
-
-        internal PositionStrength RollStrength(PositionGenerator.Position position, int rank)
-        {
-            // Check if disposed
-            ThrowIfDisposed();
-
-            PositionStrength lastRoll = default;  // Default value for enum
-            for (int i = 0; i < NUMBER_OF_ROLLS; i++)
-            {
-                lastRoll = SingleRoll(position, rank);
-            }
-
-            // Update previous strengths queue
-            if (_previousStrengths.Count >= 3)
-            {
-                _previousStrengths.Dequeue();
-            }
-            _previousStrengths.Enqueue(lastRoll);
-
-            return lastRoll;
+            // Use SecureRandomGenerator to get a random index
+            int randomIndex = _secureRandom.GetRandomValue(0, weightedStrengths.Count);
+            return weightedStrengths[randomIndex];
         }
         #endregion
 
@@ -3244,8 +3183,8 @@ namespace EHMAssistant
 
             if (disposing)
             {
-                // Free any managed objects here
-                _secureRandom?.Dispose();
+                // No need to dispose _secureRandom here as it's now static
+                // and will be handled by the application lifecycle
             }
 
             _disposed = true;

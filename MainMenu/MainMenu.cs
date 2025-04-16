@@ -88,9 +88,7 @@ namespace EHMAssistant
                         // Read all content from the file
                         allFileLines = File.ReadAllLines(filePath, Encoding.GetEncoding(1252));
                         
-                        // string fileContent = File.ReadAllText(filePath);
-
-                        // Example: Process the file content
+                        // Process the file content
                         ProcessEHMFile(allFileLines);
                     }
                     catch (Exception ex)
@@ -105,7 +103,6 @@ namespace EHMAssistant
         {
             // Skip the first line as instructed
             int lineIndex = 1;
-            Console.WriteLine("ProcessEHMFile");
 
             while (lineIndex < content.Length)
             {
@@ -149,8 +146,7 @@ namespace EHMAssistant
                 lineIndex += 20;
             }
 
-            // Store the data in static properties or pass via constructor if available
-            // Option 1: Using static properties if RosterMenu has them
+            // Store the data in static properties
             Program.PlayerDictionary = playerDictionary;
             Program.PlayerTeamDictionary = playerTeamDictionary;
             Program.Players = players;
@@ -173,26 +169,28 @@ namespace EHMAssistant
             string[] line1Values = content[startLine].Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (line1Values.Length >= 10)
             {
-                player.Skating = int.Parse(line1Values[0]);
-                player.Shooting = int.Parse(line1Values[1]);
-                player.Playmaking = int.Parse(line1Values[2]);
-                player.Stickhandling = int.Parse(line1Values[3]);
-                player.Checking = int.Parse(line1Values[4]);
-                player.Positioning = int.Parse(line1Values[5]);
-                player.Hitting = int.Parse(line1Values[6]);
-                player.Faceoffs = int.Parse(line1Values[7]);
-                player.Endurance = int.Parse(line1Values[8]);
-                player.Penalty = int.Parse(line1Values[9]);
+                player.StartingShooting = int.Parse(line1Values[0]);
+                player.StartingPlaymaking = int.Parse(line1Values[1]);
+                player.StartingStickhandling = int.Parse(line1Values[2]);
+                player.StartingChecking = int.Parse(line1Values[3]);
+                player.StartingPositioning = int.Parse(line1Values[4]);
+                player.StartingHitting = int.Parse(line1Values[5]);
+                player.StartingSkating = int.Parse(line1Values[6]);
+                player.StartingEndurance = int.Parse(line1Values[7]);
+                player.StartingPenalty = int.Parse(line1Values[8]);
+                player.StartingFaceoffs = int.Parse(line1Values[9]);
             }
-
+            
             // Line 2: More attributes
             string[] line2Values = content[startLine + 1].Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (line2Values.Length >= 5)
             {
-                player.Leadership = int.Parse(line2Values[0]);
-                player.AttributeStrength = int.Parse(line2Values[1]);
+                player.StartingLeadership = int.Parse(line2Values[0]);
+                player.StartingAttributeStrength = int.Parse(line2Values[1]);
                 player.Potential = int.Parse(line2Values[2]);
                 player.Constance = int.Parse(line2Values[3]);
+                player.Greed = int.Parse(line2Values[4]);
+                player.StartingFighting = int.Parse(line2Values[5]);
             }
 
             // Line 3: Birth year, etc.
@@ -206,7 +204,6 @@ namespace EHMAssistant
 
             // Line 14: Player name
             player.Name = content[startLine + 13].Trim();
-            Console.WriteLine("player.Name : " + player.Name);
 
             // Line 17: Birth date (formatted differently but we already have the data)
 
@@ -222,20 +219,6 @@ namespace EHMAssistant
                     player.Handedness = handedness == 0 ? "Right" : "Left";
                 }
             }
-
-            // Store starting values for attributes
-            player.StartingShooting = player.Shooting;
-            player.StartingPlaymaking = player.Playmaking;
-            player.StartingStickhandling = player.Stickhandling;
-            player.StartingChecking = player.Checking;
-            player.StartingPositioning = player.Positioning;
-            player.StartingHitting = player.Hitting;
-            player.StartingSkating = player.Skating;
-            player.StartingEndurance = player.Endurance;
-            player.StartingPenalty = player.Penalty;
-            player.StartingFaceoffs = player.Faceoffs;
-            player.StartingLeadership = player.Leadership;
-            player.StartingAttributeStrength = player.AttributeStrength;
 
             return player;
         }

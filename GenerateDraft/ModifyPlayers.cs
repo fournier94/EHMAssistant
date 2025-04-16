@@ -188,7 +188,6 @@ namespace EHMAssistant
                 position,
                 country,
                 handedness);
-            Console.WriteLine("updatedLine : " + updatedLine);
             allFileLines[lineNumber] = updatedLine;
         }
 

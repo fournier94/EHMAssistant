@@ -19,7 +19,7 @@ namespace EHMAssistant
         private PlayerTargetAttributes _playerTargetAttributes;
         private PositionStrengthGenerator _strengthGen;
         #endregion
-
+        
         #region Player list
         private List<Player> players;
         #endregion
@@ -47,8 +47,29 @@ namespace EHMAssistant
         private bool sortedOnce = false; // Used to reset sorting after generating a new draft
         private bool ascendingSort = true;  // Track sort direction
         private string currentSortColumn = "";  // Track which column we're sorting by
+
+        // Starting attributes
+        int ValueStartingFighting = 25;
+        int Rank1StartingAtt = 70;
+        int Rank2And3StartingAtt = 65;
+        int Rank4And5StartingAtt = 62;
+        int Rank6To10StartingAtt = 57;
+        int Rank11To20StartingAtt = 50;
+        int Rank21To30StartingAtt = 46;
+        int Rank31To45StartingAtt = 41;
+        int Rank46To60StartingAtt = 37;
+
+        // Starting attributes min/max rolls
+        int MinRollStartingAttributes = 1;
+
+        int Rank1MaxRollStartingAttributes = 6;
+        int Rank2And3MaxRollStartingAttributes = 7;
+        int Rank4And5MaxRollStartingAttributes = 8;
+        int Rank6To10MaxRollStartingAttributes = 10;
+        int Rank11AndHigherMaxRollStartingAttributes = 12;
+
         #endregion
-        
+
         #region Constructor
         public GenerateDraft()
         {
@@ -502,7 +523,7 @@ namespace EHMAssistant
 
         private void ComboBox_DropDown(object sender, EventArgs e)
         {
-            Console.WriteLine("ComboBox drop-down opened.");
+            
         }
 
         private void BindPlayerData()
@@ -621,7 +642,8 @@ namespace EHMAssistant
                 DistributeDefensiveAttributes(player);
                 DistributeOtherAttributes(player);
             }
-            DistributeStartingAttributes(player);
+
+            SetStartingAttribute(player);
         }
 
         private void ResetPlayerStats(Player player)
@@ -1791,13 +1813,14 @@ namespace EHMAssistant
                     DistributeDefensiveAttributes(player);
                     DistributeOtherAttributes(player);
                 }
-                DistributeStartingAttributes(player);
+
+                SetStartingAttribute(player);
 
                 players.Add(player);
             }
         }
         #endregion
-
+        
         #region Generate real draft
         public void GeneratePlayersWithSpecs(List<MenuDraftReel.PlayerSpecification> playerSpecs)
         {
@@ -1846,7 +1869,9 @@ namespace EHMAssistant
                     DistributeDefensiveAttributes(player);
                     DistributeOtherAttributes(player);
                 }
-                DistributeStartingAttributes(player);
+
+                SetStartingAttribute(player);
+
                 players.Add(player);
             }
 
@@ -2807,11 +2832,28 @@ namespace EHMAssistant
         {
             int maxRoll = 99 - player.Penalty;
             int penaltyBoost;
-
             using (var generator = new SecureRandomGenerator())
                 penaltyBoost = generator.GetRandomValue(0, maxRoll);
-
             player.Penalty += penaltyBoost;
+            if (player.Penalty >= 84)
+            {
+                int penaltyReduction;
+
+                using (var generator = new SecureRandomGenerator())
+                    penaltyReduction = generator.GetRandomValue(0, 13);
+
+                player.Penalty -= penaltyReduction;
+            }
+
+            while (player.Penalty >= 87)
+            {
+                int penaltyReduction;
+
+                using (var generator = new SecureRandomGenerator())
+                    penaltyReduction = generator.GetRandomValue(0, 13);
+
+                player.Penalty -= penaltyReduction;
+            }
         }
 
         private void RollFaceoffs(Player player)
@@ -2908,75 +2950,75 @@ namespace EHMAssistant
         #endregion
 
         #region Distribute starting attributes
-        private void DistributeStartingAttributes(Player player)
+        private void SetStartingAttribute(Player player)
         {
-            player.StartingPenalty = player.Penalty;
-            player.StartingAttributeStrength = player.AttributeStrength;
-            player.StartingFighting = 25;
-            SetStartingLeadership(player);
-
-            if (player.Rank <= 3)
+            if (player.Rank == 1)
             {
-                player.StartingShooting = 56;
-                player.StartingPlaymaking = 56;
-                player.StartingStickhandling = 56;
-                player.StartingChecking = 56;
-                player.StartingPositioning = 56;
-                player.StartingHitting = 56;
-                player.StartingSkating = 56;
-                player.StartingEndurance = 56;
-                player.StartingFaceoffs = 52;
+                DistributeStartingAttributes(player, Rank1StartingAtt, Rank1MaxRollStartingAttributes);
             }
-            else if (player.Rank <= 10)
+            else if (player.Rank == 2 || player.Rank == 3)
             {
-                player.StartingShooting = 50;
-                player.StartingPlaymaking = 50;
-                player.StartingStickhandling = 50;
-                player.StartingChecking = 50;
-                player.StartingPositioning = 50;
-                player.StartingHitting = 50;
-                player.StartingSkating = 50;
-                player.StartingEndurance = 50;
-                player.StartingFaceoffs = 45;
+                DistributeStartingAttributes(player, Rank2And3StartingAtt, Rank2And3MaxRollStartingAttributes);
             }
-            else if (player.Rank <= 30)
+            else if (player.Rank == 4 || player.Rank == 5)
             {
-                player.StartingShooting = 43;
-                player.StartingPlaymaking = 43;
-                player.StartingStickhandling = 43;
-                player.StartingChecking = 43;
-                player.StartingPositioning = 43;
-                player.StartingHitting = 43;
-                player.StartingSkating = 43;
-                player.StartingEndurance = 43;
-                player.StartingFaceoffs = 40;
+                DistributeStartingAttributes(player, Rank4And5StartingAtt, Rank4And5MaxRollStartingAttributes);
+            }
+            else if (player.Rank >= 6 && player.Rank <= 10)
+            {
+                DistributeStartingAttributes(player, Rank6To10StartingAtt, Rank6To10MaxRollStartingAttributes);
+            }
+            else if (player.Rank >= 11 && player.Rank <= 20)
+            {
+                DistributeStartingAttributes(player, Rank11To20StartingAtt, Rank11AndHigherMaxRollStartingAttributes);
+            }
+            else if (player.Rank >= 21 && player.Rank <= 30)
+            {
+                DistributeStartingAttributes(player, Rank21To30StartingAtt, Rank11AndHigherMaxRollStartingAttributes);
+            }
+            else if (player.Rank >= 31 && player.Rank <= 45)
+            {
+                DistributeStartingAttributes(player, Rank31To45StartingAtt, Rank11AndHigherMaxRollStartingAttributes);
             }
             else
             {
-                player.StartingShooting = 38;
-                player.StartingPlaymaking = 38;
-                player.StartingStickhandling = 38;
-                player.StartingChecking = 38;
-                player.StartingPositioning = 38;
-                player.StartingHitting = 38;
-                player.StartingSkating = 38;
-                player.StartingEndurance = 38;
-                player.StartingFaceoffs = 35;
+                DistributeStartingAttributes(player, Rank46To60StartingAtt, Rank11AndHigherMaxRollStartingAttributes);
             }
+        }
 
-            // Add a random value between 1 and 5 to each attribute
+        private void DistributeStartingAttributes(Player player, int startingValue, int maxRoll)
+        {
+            player.StartingPenalty = player.Penalty;
+            player.StartingAttributeStrength = player.AttributeStrength;
+            player.StartingFighting = ValueStartingFighting;
+            SetStartingLeadership(player);
+
+            player.StartingShooting = startingValue;
+            player.StartingPlaymaking = startingValue;
+            player.StartingStickhandling = startingValue;
+            player.StartingChecking = startingValue;
+            player.StartingPositioning = startingValue;
+            player.StartingHitting = startingValue;
+            player.StartingSkating = startingValue;
+            player.StartingEndurance = startingValue;
+            player.StartingFaceoffs = startingValue;
+
+            // Add a random value between 1 and 12 to each attribute
             using (var generator = new SecureRandomGenerator())
             {
-                player.StartingShooting += generator.GetRandomValue(1, 8);
-                player.StartingPlaymaking += generator.GetRandomValue(1, 8);
-                player.StartingStickhandling += generator.GetRandomValue(1, 8);
-                player.StartingChecking += generator.GetRandomValue(1, 8);
-                player.StartingPositioning += generator.GetRandomValue(1, 8);
-                player.StartingHitting += generator.GetRandomValue(1, 8);
-                player.StartingSkating += generator.GetRandomValue(1, 8);
-                player.StartingEndurance += generator.GetRandomValue(1, 8);
-                player.StartingFaceoffs += generator.GetRandomValue(1, 8);
+                player.StartingShooting += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingPlaymaking += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingStickhandling += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingChecking += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingPositioning += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingHitting += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingSkating += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingEndurance += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
+                player.StartingFaceoffs += generator.GetRandomValue(MinRollStartingAttributes, maxRoll);
             }
+
+            // Verify that starting value is lower than final value (after the player has finished improving)
+            CheckIfStartingValueIsLowerThanFinalValue(player);
         }
 
         private void SetStartingLeadership(Player player)
@@ -2997,23 +3039,38 @@ namespace EHMAssistant
                 player.StartingLeadership += generator.GetRandomValue(1, 5);
         }
 
-        private void AddRandomValueToStartingAttribute(Player player)
+        private void CheckIfStartingValueIsLowerThanFinalValue(Player player)
         {
-            if (player.Rank <= 3)
-                player.StartingLeadership = 63;
-            else if (player.Rank <= 10)
-                player.StartingLeadership = 60;
-            else if (player.Rank <= 20)
-                player.StartingLeadership = 58;
-            else if (player.Rank <= 30)
-                player.StartingLeadership = 55;
-            else
-                player.StartingLeadership = 53;
+            var props = typeof(Player).GetProperties();
 
-            // Add a random value between 1 and 5 to StartingLeadership
-            using (var generator = new SecureRandomGenerator())
-                player.StartingLeadership += generator.GetRandomValue(1, 5);
+            foreach (var startingProp in props)
+            {
+                if (startingProp.Name == "StartingOffense" ||
+                    startingProp.Name == "StartingDefense" ||
+                    startingProp.Name == "StartingOverall")
+                {
+                    continue;
+                }
+
+                if (startingProp.Name.StartsWith("Starting") && startingProp.CanRead && startingProp.CanWrite)
+                {
+                    string finalPropName = startingProp.Name.Substring("Starting".Length);
+                    var finalProp = props.FirstOrDefault(p => p.Name == finalPropName && p.CanRead);
+
+                    if (finalProp != null && finalProp.PropertyType == typeof(int))
+                    {
+                        int startingValue = (int)startingProp.GetValue(player);
+                        int finalValue = (int)finalProp.GetValue(player);
+
+                        if (startingValue > finalValue)
+                        {
+                            startingProp.SetValue(player, finalValue);
+                        }
+                    }
+                }
+            }
         }
+
         #endregion
     }
 }

@@ -44,12 +44,6 @@ namespace EHMAssistant
                 // Calculate defensive boost (remaining points)
                 int defenseBoost = targets.DistributionValue - offenseBoost;
 
-                // DEBUG LOGGING
-                Console.WriteLine($"[DEBUG] PlayerType: {playerType}, Strength: {strength}");
-                Console.WriteLine($"[DEBUG] Base Offense: {targets.TargetOffense}, Base Defense: {targets.TargetDefense}, DistributionValue: {targets.DistributionValue}");
-                Console.WriteLine($"[DEBUG] Rolled Offense Boost: {offenseBoost}, Calculated Defense Boost: {defenseBoost}");
-                Console.WriteLine($"[DEBUG] Final Offense: {targets.TargetOffense + offenseBoost}, Final Defense: {targets.TargetDefense + defenseBoost}");
-
                 return (targets.TargetOffense + offenseBoost,
                        targets.TargetDefense + defenseBoost);
             }

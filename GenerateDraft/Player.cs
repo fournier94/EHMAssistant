@@ -12,7 +12,7 @@ namespace EHMAssistant
         private readonly NameGenerator _nameGen;
         private static readonly SecureRandomGenerator _secureRandom = new SecureRandomGenerator();
         #endregion
-
+        
         #region Player informations
         public string Name { get; set; }
         public string BirthDay { get; set; }
@@ -59,11 +59,7 @@ namespace EHMAssistant
         // Hidden attributes
         public int Potential { get; set; }
         public int Constance { get; set; }
-
-        public int Greed
-        {
-            get { return 75; }
-        }
+        public int Greed { get; set; }
 
         public int Offense
         {
@@ -95,6 +91,7 @@ namespace EHMAssistant
         #endregion
         
         #region Starting attributes
+
         public int StartingFighting { get; set; }
 
         // OFF
@@ -114,8 +111,37 @@ namespace EHMAssistant
         public int StartingFaceoffs { get; set; }
         public int StartingLeadership { get; set; }
         public int StartingAttributeStrength { get; set; }
-        #endregion
 
+        public int StartingOffense
+        {
+            get
+            {
+                return (int)Math.Round((StartingShooting + StartingPlaymaking + StartingStickhandling) / 3.0);
+            }
+        }
+
+        public int StartingDefense
+        {
+            get
+            {
+                return (int)Math.Round((StartingChecking + StartingPositioning + StartingHitting) / 3.0);
+            }
+        }
+
+        public int StartingOverall
+        {
+            get
+            {
+                return (int)Math.Round(
+            (StartingShooting + StartingPlaymaking + StartingStickhandling +
+             StartingChecking + StartingPositioning + StartingHitting +
+             StartingSkating + StartingEndurance + StartingPenalty +
+             StartingFaceoffs + StartingLeadership + StartingAttributeStrength + Constance + Greed + Potential) / 14.0);
+            }
+        }
+
+        #endregion
+        
         #region Ceilings
         public int CeilingFighting => GetCeilingValue(Fighting, Potential);
         public int CeilingShooting => GetCeilingValue(Shooting, Potential);
@@ -149,6 +175,7 @@ namespace EHMAssistant
             PlayerType = typeGen.RollPlayerType(PlayerPosition, Rank);
             PositionStrength = strengthGen.RollStrength(PlayerPosition, Rank);
             _nameGen = new NameGenerator();
+            Greed = 75;
 
             // Handle Canadian player naming with language consideration
             if (PlayerCountry == CountryGenerator.Country.Canada)

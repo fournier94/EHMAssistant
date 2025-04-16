@@ -17,7 +17,7 @@ namespace EHMAssistant
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenu());
+            Application.Run(new GenerateDraft());
         }
 
         // Static properties to store the player data
