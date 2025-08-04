@@ -57,7 +57,7 @@ namespace EHMAssistant
         int Rank11To20StartingAtt = 50;
         int Rank21To30StartingAtt = 46;
         int Rank31To45StartingAtt = 41;
-        int Rank46To60StartingAtt = 37;
+        int Rank46AndHigherStartingAtt = 37;
 
         // Starting attributes min/max rolls
         int MinRollStartingAttributes = 1;
@@ -2982,7 +2982,7 @@ namespace EHMAssistant
             }
             else
             {
-                DistributeStartingAttributes(player, Rank46To60StartingAtt, Rank11AndHigherMaxRollStartingAttributes);
+                DistributeStartingAttributes(player, Rank46AndHigherStartingAtt, Rank11AndHigherMaxRollStartingAttributes);
             }
         }
 
