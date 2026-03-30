@@ -1,0 +1,7 @@
+Cette application permet de générer un repêchage de joueurs pour le jeu "EHM freeware" qui est utilisé principalement pour les ligues de hockey simulées qui sont très populaires au Québec. Les joueurs du repêchage sont créés de A à Z et sont directement importés dans le fichier de sauvegarde du jeu.
+
+Au départ 60 joueurs sont créés et sont classés de 1 à 60. Plus un joueur a un bon classement, plus il a de chances de devenir un bon joueur. Par exemple un joueur classé premier a 25% de chance de devenir un joueur "élite", 50% de chance de devenir un "joueur de premier trio" et 25% de chance de devenir un "joueur de deuxième trio", c'est donc dire que bien que le rang de repêchage est un bon indicateur de la qualité de ce joueur, il n'est toutefois pas impossible que celui classé deuxième soit meilleur que le premier, c'est toutefois moins probable.
+
+La valeur des propriétés des joueurs sont assignées à l'aide de tables de probabilités basées sur des valeurs réelles. Par exemple dans la LNH il y a environ 40% de joueurs canadiens donc l'application génère environ 40% de joueurs canadiens. 
+Un joueur de plus grande taille a plus de chance d'avoir une bonne force physique mais moins de chance d'être rapide. 
+Bien que peu probable, il est tout de même possible d'obtenir des joueurs atypiques comme par exemple un très grand joueur qui est très rapide. 
